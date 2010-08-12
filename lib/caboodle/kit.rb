@@ -1,7 +1,4 @@
 module Caboodle
-  Kits = []
-  Javascripts = []
-  Stylesheets = []
   
   class Kit < Sinatra::Base
     #register Sinatra::Compass

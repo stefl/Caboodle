@@ -19,7 +19,7 @@ module Caboodle
     helpers Sinatra::ContentFor
   
     configure do
-      config_path = File.expand_path(File.join(root,"site.yml"))
+      config_path = File.expand_path(File.join(root,"config","site.yml"))
       if File.exists?(config_path)
         Caboodle::Kit.load_config(config_path)
         Caboodle::Kit.setup
