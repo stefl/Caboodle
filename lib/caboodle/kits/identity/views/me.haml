@@ -1,0 +1,22 @@
+.page
+  %p
+    Some info about me
+
+  / %p
+  /   = "#{identity.first_name} is #{identity.descriptor}, currently working as #{identity.main_job} in #{identity.city_of_work}."
+  / 
+  / %p
+  /   In the past #{identity.first_name} #{identity.past_identities.first}. And before that #{identity.him_or_her} #{identity.past_identities[1]}.
+  / 
+  / %p
+  /   Three things you might find interesting about #{identity.him_or_her}:
+  /   
+  / %ul#things_of_interest
+  /   - identity.things_of_interest[0..2].each do |orly|
+  /   %li.orly
+  /     = orly
+  /     
+  / %p  
+  /   = "In #{identity.his_or_hers} spare time #{identity.he_or_she}"
+  /   = succeed(".") do
+  /     = identity.spare_time_activities[0..4].join(",")

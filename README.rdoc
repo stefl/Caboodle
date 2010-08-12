@@ -1,6 +1,10 @@
 = caboodle
 
-Description goes here.
+Caboodle is a simple way to create a quick mashup website.
+
+Select which Kits to use in your site, or create your own. 
+
+Caboodle is based on Sinatra, and each Kit is a small Sinatra application.
 
 == Note on Patches/Pull Requests
  
@@ -14,4 +18,4 @@ Description goes here.
 
 == Copyright
 
-Copyright (c) 2010 steflewandowski. See LICENSE for details.
+Copyright (c) 2010 Stef Lewandowski. See LICENSE for details.

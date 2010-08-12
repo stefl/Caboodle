@@ -1,0 +1,29 @@
+- post = locals[:post]
+
+%article.post.hentry.publish{:class=>post.semantic_tags}
+  - if locals[:full]
+
+  - else
+    %h2.entry-title
+      %a{:href => post.url}= post.title
+
+  %section.entry-content
+    = post.body.gsub(/\n\n/m, "<br /><br />") 
+    - if post.more?
+      %a{:href => post.url} Continue reading &raquo;
+      
+  %aside.entry-meta
+    %span.meta-prep.meta-prep-author By
+    %span.author.vcard
+      %a.url.fn.n{:href => "/about", :title => "About the author"}= Caboodle::Site.author
+    %span.meta-sep.meta-sep-entry-date |
+    %span.meta-prep.meta-prep-entry-date Published:
+    %span.entry-date
+      %abbr.published{:title => post.date.strftime("%d")}= post.date.strftime("%b")
+    %small
+      %span.tag-links
+        = post.linked_tags
+      - if Caboodle::Site.disqus
+        |
+        %a{:href => "#{post.url}#disqus_thread"} comments
+  

@@ -1,0 +1,21 @@
+%div.posterous
+  - if defined?(@posts) && @posts.nil?
+    %h3
+      Sorry, there's a problem communicating with Posterous.com
+  - else
+    - @posts.each do |post|
+      = haml :_post, :layout=>false, :locals=>{:post=>post}
+    #pagination
+      Pagination here
+    - if Caboodle::Site.disqus
+      :javascript
+        (function() {
+        	var links = document.getElementsByTagName('a');
+        	var query = '?';
+        	for(var i = 0; i < links.length; i++) {
+        		if(links[i].href.indexOf('#disqus_thread') >= 0) {
+        			query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+        		}
+        	}
+        	document.write('<script type="text/javascript" src="http://disqus.com/forums/#{Caboodle::Site.disqus}/get_num_replies.js' + query + '"></' + 'script>');
+        	})();

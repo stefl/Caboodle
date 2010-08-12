@@ -1,0 +1,101 @@
+:javascript
+  /*
+  * Adapted from:      Marco Kuiper (http://www.marcofolio.net/)
+  * And:               Simon Whatley (http://www.simonwhatley.co.uk/parsing-twitter-usernames-hashtags-and-urls-with-javascript)         
+  */
+
+  String.prototype.parseHashtag = function() {
+  	return this.replace(/[#]+[A-Za-z0-9-_]+/g, function(t) {
+  		var tag = t.replace("#","%23")
+  		return t.link("http://search.twitter.com/search?q="+tag);
+  	});
+  };
+  
+  String.prototype.parseUsername = function() {
+  	return this.replace(/[@]+[A-Za-z0-9-_]+/g, function(u) {
+  		var username = u.replace("@","")
+  		return u.link("http://twitter.com/"+username);
+  	});
+  };
+  
+  String.prototype.parseURL = function() {
+  	return this.replace(/[A-Za-z]+:\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9-_:%&\?\/.=]+/g, function(url) {
+  		return url.link(url);
+  	});
+  };
+  
+  $(document).ready(function()
+  {
+  	/**
+  	* Set the size for each page to load
+  	*/
+  	var pageSize = 15;
+
+  	/**
+  	* Username to load the timeline from
+  	*/
+  	var username = '#{Caboodle::Site.twitter_username}';
+
+  	/**
+  	* Variable for the current page
+  	*/
+  	var currentPage = 1;
+
+  	// Appends the new tweet to the UI
+  	var appendTweet = function(tweet, id) {
+  		$("<p class='tweet' />")
+  			
+  			.html($("<a class='status_link' />")
+  					.attr("href", "http://twitter.com/" + username + "/status/" + id)
+  					.attr("title", "Go to Twitter status")
+  					.append($("<img class='status' />")
+  						.attr("src", "/images/link.png")
+  					)
+  			)
+  			.append(tweet)
+  		.appendTo($("#tweets"));
+  	};
+
+  	// Loads the next tweets
+  	var loadTweets = function() {
+  		var url = "http://twitter.com/status/user_timeline/"
+  				+ username + ".json?count="+pageSize+"&page="+currentPage+"&callback=?";
+
+  		$.getJSON(url,function(data) {
+  			$.each(data, function(i, post) {
+  				appendTweet("<p>" + post.text.parseURL().parseUsername().parseHashtag() + "</p>", post.id);
+  			});
+
+  			// We're done loading the tweets, so hide the overlay and update the UI
+  			$("#overlay").fadeOut();
+  			$("#pageCount").html(currentPage);
+  			$("#tweetCount").html(currentPage * pageSize);
+  		});
+
+  	};
+
+  	// First time, directly load the tweets
+  	loadTweets();
+
+  	// Append a scroll event handler to the container
+  	
+  	$(window).scroll(function(){
+        if  ($(window).scrollTop() == $(document).height() - $(window).height()){
+           currentPage++;
+
+     			if(currentPage > 10) {
+     				alert('We should not spam the Twitter API with calls. I hope you get the idea!');
+     				return false;
+     			}
+
+     			$("#overlay").fadeIn();
+     			loadTweets();
+        }
+    });
+  		
+  });
+
+#twitter.page
+  #tweets
+  #overlay
+    %img{:src=>"/images/ajax-loader.gif"}

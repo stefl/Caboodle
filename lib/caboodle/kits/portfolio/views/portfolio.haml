@@ -1,0 +1,29 @@
+- #todo - this should be a vcalendar
+#portfolio.page
+  %dl
+    - if Caboodle::Site.portfolio_years.respond_to?(:sort)
+      - Caboodle::Site.portfolio_years.sort.reverse.each do |year,items|
+        %dt.year{:class=>year}
+          = year
+        %dd
+          %ul.portfolio_items
+            - if items.respond_to?(:each)
+              - items.each do |item|
+                %li.portfolio_item{:class=>item.tags}
+                  %h3
+                    - if item.link
+                      %a{:href=>item.link}
+                        = item.title
+                    - else
+                      = item.title
+                  %p.role
+                    = item.role
+                  %p.description
+                    = item.description
+             
+                
+                  - if item.awards
+                    %ul.awards
+                      - item.awards.each do |award|
+                        %li.award
+                          = award

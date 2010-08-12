@@ -1,0 +1,14 @@
+- if ENV["RACK_ENV"] == "development"
+  :javascript
+    var disqus_developer = true;
+    
+%div.posterous
+  = haml :_post, :locals=>{:post=>post, :full=>true}, :layout=>false
+  - if Caboodle::Site.disqus
+    #disqus_thread
+    %script{:src => "http://disqus.com/forums/#{Caboodle::Site.disqus}/embed.js", :type => "text/javascript"}
+    %noscript
+      %a{:href => "http://#{Caboodle::Site.disqus}.disqus.com/?url=ref"} View the discussion thread.
+    %a.dsq-brlink{:href => "http://disqus.com"}
+      blog comments powered by
+      %span.logo-disqus Disqus

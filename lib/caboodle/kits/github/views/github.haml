@@ -1,0 +1,11 @@
+#github.page
+  %h3
+    My projects
+  %dl.repositories.me
+    - @my_repos.each do |repo|
+      = haml :_repo, :locals=>{:repo=>repo}, :layout=>false
+  %h3
+    Forked projects
+  %dl.repositories.forked
+    - @forked_repos.each do |repo|
+      = haml :_repo, :locals=>{:repo=>repo}, :layout=>false

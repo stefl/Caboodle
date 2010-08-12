@@ -1,0 +1,108 @@
+- if defined?(@photoset) && @photoset.nil?
+  .page
+    %h3
+      Sorry - there was a problem communicating with Flickr
+- else
+
+  %script{:charset => "utf-8", :src => "/galleria.js", :type => "text/javascript"}
+
+  :javascript
+    jQuery(document).ready(function(){
+	
+      var ifo = {
+              Api : '#{Caboodle::Site.flickr_api_key}', //flickr api
+      	Set : '#{@set_id}', //photo set
+      	fLink : 'http://www.flickr.com/photos/#{Caboodle::Site.flickr_username}/',
+      	Cant : 24
+      };
+  
+      var json_url = 'http://api.flickr.com/services/rest/?format=json&jsoncallback=?&api_key='+ifo.Api+'&method=flickr.photosets.getPhotos&photoset_id='+ifo.Set+'&per_page='+ifo.Cant;
+      jQuery.getJSON(json_url, function(Data){
+           	if (Data.stat == "ok"){
+           	  console.log(Data);
+      	 for (var i=0; i<Data.photoset.photo.length; i++){
+                	var photo = Data.photoset.photo[i];
+                	var Thum = 'http://farm'+photo['farm']+'.static.flickr.com/'+photo['server']+'/'+photo['id']+'_'+photo['secret']+'_'+'s.jpg';
+                	var Full = 'http://farm'+photo['farm']+'.static.flickr.com/'+photo['server']+'/'+photo['id']+'_'+photo['secret']+'.jpg';
+                	var thumb_class = '';
+                	if(i == 0)
+                	{
+                	  thumb_class = 'active';
+                	}
+            	
+                	jQuery('.gallery ul').append('<li class="'+thumb_class+'"><a href="'+Full+'"><img src="'+Thum+'" alt="'+photo['title']+'" /></a></li>');      	
+          	
+              	};
+           	}
+  
+	
+	
+    	jQuery('.gallery ul').addClass('gallery_list'); // adds new class name to maintain degradability
+	
+    	jQuery('ul.gallery_list').galleria({
+    	  preload: 3,
+        transition: 'fade',
+    		history   : true, // activates the history object for bookmarking, back-button etc.
+    		clickNext : true, // helper for making the image clickable
+    		insert    : '#main_image', // the containing selector for our main image
+    		onImage   : function(image,caption,thumb) { // let's add some image effects for demonstration purposes
+    			// fade in the image & caption
+    			//image.css('display','none').fadeIn(1000);
+    			caption.css('display','none').fadeIn(1000);
+			
+    			// fetch the thumbnail container
+    			var _li = thumb.parents('li');
+			
+    			// fade out inactive thumbnail
+    			_li.siblings().children('img.selected').fadeTo(500,0.3);
+			
+    			// fade in active thumbnail
+    			thumb.fadeTo('fast',1).addClass('selected');
+			
+    			// add a title for the clickable image
+    			image.attr('title','Next image >>');
+    		},
+    		onThumb : function(thumb) { // thumbnail effects goes here
+			
+    			// fetch the thumbnail container
+    			var _li = thumb.parents('li');
+			
+    			// if thumbnail is active, fade all the way.
+    			var _fadeTo = _li.is('.active') ? '1' : '0.3';
+			
+    			// fade in the thumbnail when finished loading
+    			thumb.css({display:'none',opacity:_fadeTo}).fadeIn(1500);
+			
+    			// hover effects
+    			thumb.hover(
+    				function() { thumb.fadeTo('fast',1); },
+    				function() { _li.not('.active').children('img').fadeTo('fast',0.3); } // don't fade out if the parent is active
+    			)
+    		}
+    	});
+    	});
+    });
+
+  %section.subsection
+  
+    %aside.submenu
+      %ul
+        - @photosets.each do |photoset|
+          %li
+            %a{:href=>"/photography/#{photoset.id}"}= photoset.title
+  
+    %section.subpage
+      - if @set_id
+        #galleria_gallery
+          #main_image
+          #gallery.gallery
+            %ul
+            %p.nav
+            #gallery_description
+              = @photoset.description
+      - else
+        %h3
+          Choose a gallery &raquo;
+    
+        
+  
