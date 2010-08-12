@@ -1,3 +1,5 @@
-$:<<"/files/pago/caboodle_gem"
+gem "bundler"
+require "bundler"
+Bundler.setup
 require 'caboodle'
 run Caboodle::App

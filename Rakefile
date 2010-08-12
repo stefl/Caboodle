@@ -10,6 +10,7 @@ begin
     gem.email = "stef@stef.io"
     gem.homepage = "http://github.com/steflewandowski/caboodle"
     gem.authors = ["steflewandowski"]
+    gem.add_dependency "heroku", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new

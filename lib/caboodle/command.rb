@@ -1,3 +1,4 @@
+gem 'heroku'
 require 'heroku'
 require 'heroku/command'
 
@@ -7,12 +8,12 @@ module Caboodle
       def run(command, args, retries=0)
         case command
         when "create"
-          
           puts `mkdir #{args.first}`
           puts `cd #{args.first} && cp -r #{File.expand_path(File.join(File.dirname(__FILE__), 'app'))}/* .`
           puts `cd #{args.first} && cp #{File.expand_path(File.join(File.dirname(__FILE__), 'app'))}/.gems .`
           puts `cd #{args.first} && git init`
           puts `cd #{args.first} && git add .`
+          puts `bundle install`
           puts `cd #{args.first} && git commit -m"initial setup"`
           puts `cd #{args.first} && heroku create #{args.first}`
           puts `cd #{args.first} && git push heroku master`
