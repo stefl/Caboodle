@@ -35,6 +35,7 @@ module Caboodle
   class Flickr < Caboodle::Kit
     
     set :views, File.join(File.dirname(__FILE__), "views")
+    set :public, File.join(File.dirname(__FILE__), "public")
     
     def home
       @photosets = FlickrAPI.photosets rescue []
@@ -52,10 +53,6 @@ module Caboodle
       @photoset = Caboodle::FlickrAPI.photoset_info(@set_id) rescue nil
       @title = "Photography: #{@photoset.title if @photoset.respond_to?(:title)}"
       haml :photography
-    end
-    
-    get "/galleria.js" do
-      send_file File.join(File.dirname(__FILE__),"galleria.noconflict.min.js")
     end
     
     required [:flickr_username, :flickr_user_id, :flickr_api_key]
