@@ -1,4 +1,5 @@
-:kits:
-  - Flickr
-  - Linkedin
-  - Posterous
+home_title: Blog
+kits:
+- Flickr
+- Linkedin
+- Posterous

@@ -13,7 +13,6 @@ module Caboodle
           puts `cd #{args.first} && cp #{File.expand_path(File.join(File.dirname(__FILE__), 'app'))}/.gems .`
           puts `cd #{args.first} && git init`
           puts `cd #{args.first} && git add .`
-          puts `bundle install`
           puts `cd #{args.first} && git commit -m"initial setup"`
           puts `cd #{args.first} && heroku create #{args.first}`
           puts `cd #{args.first} && git push heroku master`

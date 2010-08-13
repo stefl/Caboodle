@@ -3,6 +3,7 @@
   %head{:profile => "http://gmpg.org/xfn/11"}
     %meta{:content => "text/html; charset=utf-8", "http-equiv" => "content-type"}/
     %meta{:content => "index,follow", :name => "robots"}/
+    = Caboodle::Site.meta
     
     %title= @title || Caboodle::Site.title
     %link{:href => "/stylesheets/screen.css", :rel => "stylesheet", :type => "text/css"}/
@@ -18,49 +19,72 @@
     - Caboodle::Javascripts.each do |js|
       %script{:charset => "utf-8", :src => js, :type => "text/javascript"}
 
-    / - content_for :javascripts do
-    /   
-    / 
-    /     = yield_content :some_key
+    = Caboodle::Site.head
     
-        
-  %body.sinatra.ruby
+  %body.caboodle.sinatra.ruby
+    = Caboodle::Site.before_page
     #page.hfeed
+      = Caboodle::Site.before_header
       %header#site-header
-        #logo
-          %a{:href => "/", :rel => "home", :title => Caboodle::Site.title }
-            %img{:src=>Caboodle::Site.logo_url, :width=>"64", :height=>"64"}
-        #site-title
-          %h1
+        = Caboodle::Site.above_header
+        - if Caboodle::Site.has_logo
+          #logo
             %a{:href => "/", :rel => "home", :title => Caboodle::Site.title }
-              = Caboodle::Site.title
-        #site-description
-          %h2= Caboodle::Site.description
-        #access
-          .skip-link
-            %a{:href => "#content", :title => "Skip navigation to the content"} Skip to content
-        %nav
-          %ul
-            %li
-              %a{:href=>"/"}
-                = Caboodle::Site.home_title
-            - Caboodle::MenuItems.each do |p|
-              %li
-                %a{:href=>p[:link]}
-                  = p[:display]
-                
-      %section#main
-        - if @title
-          %header#page_title
+              %img{:src=>Caboodle::Site.logo_url, :width=>"64", :height=>"64"}
+        - if Caboodle::Site.has_title
+          #site-title
             %h1
-              = @title
+              %a{:href => "/", :rel => "home", :title => Caboodle::Site.title }
+                = Caboodle::Site.title
+        - if Caboodle::Site.description
+          #site-description
+            %h2= Caboodle::Site.description
+        - if Caboodle::Site.has_access
+          #access
+            .skip-link
+              %a{:href => "#content", :title => "Skip navigation to the content"} Skip to content
+        
+        - if Caboodle::Site.has_nav
+          = Caboodle::Site.before_nav
+          %nav
+            %ul
+              %li
+                %a{:href=>"/"}
+                  = Caboodle::Site.home_title
+              - Caboodle::MenuItems.each do |p|
+                %li
+                  %a{:href=>p[:link]}
+                    = p[:display]
+            
+        = Caboodle::Site.below_header
+      = Caboodle::Site.after_header
+      = Caboodle::Site.before_main
+      %section#main
+        - if Caboodle::Site.has_page_title
+          - if @title
+            %header#page_title
+              %h1
+                = @title
+        = Caboodle::Site.before_content
         %section#content
+          = Caboodle::Site.above_content
           = yield
+          = Caboodle::Site.below_content
+        = Caboodle::Site.after_content
+      = Caboodle::Site.after_main
+      = Caboodle::Site.before_footer
       %footer#footer
-        %p
-          \&copy; 
-          = Caboodle::Site.author
-          |
-          Powered by 
-          %a{:href=>"http://github.com/steflewandowski/caboodle"}
-            Caboodle
+        = Caboodle::Site.above_footer
+        - if Caboodle::Site.has_footer
+          %p
+            \&copy; 
+            = Caboodle::Site.author
+            - if Caboodle::Site.has_caboodle_link
+              |
+              Powered by 
+              %a{:href=>"http://github.com/steflewandowski/caboodle"}
+                Caboodle
+        = Caboodle::Site.below_footer     
+      = Caboodle::Site.after_footer
+    = Caboodle::Site.after_page
+  = Caboodle::Site.after_body
