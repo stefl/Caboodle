@@ -2,12 +2,22 @@ module Caboodle
   
   class FlickrAPI < Weary::Base
   
+    def self.flickr_user_id
+      return Site.flickr_user_id unless Site.flickr_user_id.blank?
+      url = "http://query.yahooapis.com/v1/public/yql?q=use%20%22http%3A%2F%2Fisithackday.com%2Fapi%2Fflickr.whois.xml%22%20as%20flickr.whois%3Bselect%20*%20from%20flickr.whois%20where%20owner%3D%22#{Site.flickr_username}%22&format=xml"
+      doc = Nokogiri::XML.parse(open(url))
+      val = doc.css("owner").first.attributes["nsid"].value
+      Site.flickr_user_id = val
+      Caboodle::Kit.dump_config
+      Site.flickr_user_id
+    end
+    
     def initialize(opts={})
       self.defaults = {:api_key => Site.flickr_api_key}
     end
   
     declare "photosets" do |r|
-      r.url = "http://api.flickr.com/services/rest/?method=flickr.photosets.getList&api_key=#{Site.flickr_api_key}&user_id=#{FlickrAPI.flickr_user_id}"
+      r.url = "http://api.flickr.com/services/rest/?method=flickr.photosets.getList&api_key=#{Site.flickr_api_key}&user_id=#{Caboodle::FlickrAPI.flickr_user_id}"
       r.via = :get
     end
     
@@ -29,23 +39,10 @@ module Caboodle
     def self.photosets
       Caboodle.mash(new.photosets).rsp.photosets.photoset
     end
-    
-    def self.flickr_user_id
-      return Site.flickr_user_id unless Site.flickr_user_id.blank?
-      url = "http://query.yahooapis.com/v1/public/yql?q=use%20%22http%3A%2F%2Fisithackday.com%2Fapi%2Fflickr.whois.xml%22%20as%20flickr.whois%3Bselect%20*%20from%20flickr.whois%20where%20owner%3D%22#{Site.flickr_username}%22&format=xml"
-      doc = Nokogiri::XML.parse(open(url))
-      val = doc.css("owner").first.attributes["nsid"].value
-      Site.flickr_user_id = val
-      Caboodle::Kit.dump_config
-      Site.flickr_user_id
-    end
-    
+
   end
 
   class Flickr < Caboodle::Kit
-    
-    set :views, File.join(File.dirname(__FILE__), "views")
-    set :public, File.join(File.dirname(__FILE__), "public")
     
     def home
       @photosets = FlickrAPI.photosets rescue []

@@ -15,9 +15,7 @@ module Caboodle
   end
 
   class Linkedin < Caboodle::Kit
-    
-    set :views, File.join(File.dirname(__FILE__), "views")
-    
+        
     get "/cv" do
       @title = "Curriculum Vitae"
       

@@ -14,6 +14,18 @@ module Caboodle
     end
     
     class << self
+      
+      def inherited subclass
+        c = caller[0].split(":")
+        f = File.dirname(File.expand_path("#{c[0]}"))
+        puts "Subclass #{subclass} inherited from #{f}"
+        views = File.join(f, "views")
+        pub = File.join(f, "public")
+        subclass.set :views, views if File.exists?(views)
+        subclass.set :public, pub if File.exists?(pub)
+        super
+      end
+      
       def is_a_caboodle_kit
         true
       end
@@ -46,7 +58,7 @@ module Caboodle
           kit_name = kit_name.downcase
           puts "Loading Kit: #{kit_name}"
           orig = Caboodle.constants
-          require "caboodle/kits/#{kit_name}/#{kit_name}" rescue puts "Warning! No such kit: #{kit_name}"
+          require "caboodle/kits/#{kit_name}/#{kit_name}" #rescue puts "Warning! No such kit: #{kit_name}"
           added = Caboodle.constants - orig
           added.each do |d| 
             c = Caboodle.const_get(d)
@@ -130,6 +142,18 @@ module Caboodle
       def javascripts array_of_js_files
         array_of_js_files.each { |a| Caboodle::Javascripts << a }
         Caboodle::Javascripts.uniq!
+      end
+      
+      def add_to_layout hash_of_items
+        hash_of_items.each do |k,v|
+          unless Caboodle::Layout[k.to_sym].blank?
+            Caboodle::Layout[k.to_sym] << "\n"
+            Caboodle::Layout[k.to_sym] << v
+          else
+            Caboodle::Layout[k.to_sym] = v
+          end
+        end
+        puts Caboodle::Layout.inspect
       end
       
       def defaults hash

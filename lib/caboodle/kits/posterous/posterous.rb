@@ -132,8 +132,6 @@ module Caboodle
 
   class Posterous < Caboodle::Kit
   
-    set :views, File.join(File.dirname(__FILE__), "views")
-  
     get "/page/:page_number" do |page_number|
       @posts = Post.page(page_number) rescue nil
       not_found if @posts.class == Array && @posts.blank?

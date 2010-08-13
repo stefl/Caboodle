@@ -52,9 +52,7 @@ module Caboodle
   end
   
   class PageApp < Caboodle::Kit
-    
-    set :views, File.join(File.dirname(__FILE__), "views")
-    
+        
     Caboodle::Site.pages = Caboodle::Page.all
     Caboodle::Site.pages.each do |page|
       get "/#{page.slug}" do

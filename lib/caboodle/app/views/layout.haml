@@ -3,7 +3,8 @@
   %head{:profile => "http://gmpg.org/xfn/11"}
     %meta{:content => "text/html; charset=utf-8", "http-equiv" => "content-type"}/
     %meta{:content => "index,follow", :name => "robots"}/
-    = Caboodle::Site.meta
+    
+    = Caboodle::Layout.meta
     
     %title= @title || Caboodle::Site.title
     %link{:href => "/stylesheets/screen.css", :rel => "stylesheet", :type => "text/css"}/
@@ -19,14 +20,14 @@
     - Caboodle::Javascripts.each do |js|
       %script{:charset => "utf-8", :src => js, :type => "text/javascript"}
 
-    = Caboodle::Site.head
+    = Caboodle::Layout.head
     
-  %body.caboodle.sinatra.ruby
-    = Caboodle::Site.before_page
+  %body.caboodle
+    = Caboodle::Layout.before_page
     #page.hfeed
-      = Caboodle::Site.before_header
+      = Caboodle::Layout.before_header
       %header#site-header
-        = Caboodle::Site.above_header
+        = Caboodle::Layout.above_header
         - if Caboodle::Site.logo_url
           #logo
             %a{:href => "/", :rel => "home", :title => Caboodle::Site.title }
@@ -45,7 +46,7 @@
               %a{:href => "#content", :title => "Skip navigation to the content"} Skip to content
         
         - if Caboodle::MenuItems.size > 0
-          = Caboodle::Site.before_nav
+          = Caboodle::Layout.before_nav
           %nav
             %ul
               %li
@@ -56,24 +57,24 @@
                   %a{:href=>p[:link]}
                     = p[:display]
             
-        = Caboodle::Site.below_header
-      = Caboodle::Site.after_header
-      = Caboodle::Site.before_main
+        = Caboodle::Layout.below_header
+      = Caboodle::Layout.after_header
+      = Caboodle::Layout.before_main
       %section#main
         - if @title
           %header#page_title
             %h1
               = @title
-        = Caboodle::Site.before_content
+        = Caboodle::Layout.before_content
         %section#content
-          = Caboodle::Site.above_content
+          = Caboodle::Layout.above_content
           = yield
-          = Caboodle::Site.below_content
-        = Caboodle::Site.after_content
-      = Caboodle::Site.after_main
-      = Caboodle::Site.before_footer
+          = Caboodle::Layout.below_content
+        = Caboodle::Layout.after_content
+      = Caboodle::Layout.after_main
+      = Caboodle::Layout.before_footer
       %footer#footer
-        = Caboodle::Site.above_footer
+        = Caboodle::Layout.above_footer
         - if Caboodle::Site.has_footer
           %p
             \&copy; 
@@ -83,7 +84,7 @@
               Powered by 
               %a{:href=>"http://github.com/steflewandowski/caboodle"}
                 Caboodle
-        = Caboodle::Site.below_footer     
-      = Caboodle::Site.after_footer
-    = Caboodle::Site.after_page
-  = Caboodle::Site.after_body
+        = Caboodle::Layout.below_footer     
+      = Caboodle::Layout.after_footer
+    = Caboodle::Layout.after_page
+  = Caboodle::Layout.after_body

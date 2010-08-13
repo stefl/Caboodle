@@ -1,9 +1,6 @@
 module Caboodle
   class Soundcloud < Caboodle::Kit
     
-    set :views, File.join(File.dirname(__FILE__), "views")
-    set :public, File.join(File.dirname(__FILE__), "public")
-    
     get "/mixes" do
       @title = "Mixes"
       @mixes = SoundcloudAPI.sets
