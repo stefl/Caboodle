@@ -27,11 +27,11 @@
       = Caboodle::Site.before_header
       %header#site-header
         = Caboodle::Site.above_header
-        - if Caboodle::Site.has_logo
+        - if Caboodle::Site.logo_url
           #logo
             %a{:href => "/", :rel => "home", :title => Caboodle::Site.title }
               %img{:src=>Caboodle::Site.logo_url, :width=>"64", :height=>"64"}
-        - if Caboodle::Site.has_title
+        - if Caboodle::Site.title
           #site-title
             %h1
               %a{:href => "/", :rel => "home", :title => Caboodle::Site.title }
@@ -44,7 +44,7 @@
             .skip-link
               %a{:href => "#content", :title => "Skip navigation to the content"} Skip to content
         
-        - if Caboodle::Site.has_nav
+        - if Caboodle::MenuItems.size > 0
           = Caboodle::Site.before_nav
           %nav
             %ul
@@ -60,11 +60,10 @@
       = Caboodle::Site.after_header
       = Caboodle::Site.before_main
       %section#main
-        - if Caboodle::Site.has_page_title
-          - if @title
-            %header#page_title
-              %h1
-                = @title
+        - if @title
+          %header#page_title
+            %h1
+              = @title
         = Caboodle::Site.before_content
         %section#content
           = Caboodle::Site.above_content
