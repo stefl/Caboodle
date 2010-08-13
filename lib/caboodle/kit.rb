@@ -27,7 +27,7 @@ module Caboodle
       end
 
       def dump_config
-        p = File.expand_path(File.join(Caboodle::App.root,"site.yml"))
+        p = File.expand_path(File.join(Caboodle::App.root,"config","site.yml"))
         d = Caboodle::Site.clone
         e = d.to_hash
         e.delete("required_settings")
