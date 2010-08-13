@@ -11,8 +11,6 @@ module Caboodle
 
     template :layout do
       @@template ||= File.open(File.join(File.dirname(__FILE__),"app","views","layout.haml")).read
-      puts @@template.inspect
-      @@template
     end
     
     class << self
@@ -43,11 +41,11 @@ module Caboodle
       
       def load_kit name
         unless name.blank?
-          puts "Load kit #{name}"
           kit_name = name.to_s.split("::").last || name
           kit_name = kit_name.downcase
+          puts "Loading Kit: #{kit_name}"
           orig = Caboodle.constants
-          require "caboodle/kits/#{kit_name}/#{kit_name}" rescue puts "No such kit: #{kit_name}"
+          require "caboodle/kits/#{kit_name}/#{kit_name}" rescue puts "Warning! No such kit: #{kit_name}"
           added = Caboodle.constants - orig
           added.each do |d| 
             c = Caboodle.const_get(d)
@@ -73,19 +71,14 @@ module Caboodle
     
       def require_all
         if(Caboodle::Site.kits)
-          Caboodle::Site.kits.each do |k|
-            puts "Load Kit: #{k}"
-            load_kit k
-          end
+          Caboodle::Site.kits.each { |k| load_kit k }
         else
-          puts "Kits not registered"
+          STDERR.puts "Kits not registered"
         end
       end
     
       def use_all
-        Caboodle::Kits.each do |p|
-          p.start
-        end
+        Caboodle::Kits.each { |p| p.start }
       end
     
       def menu display, link
@@ -103,16 +96,12 @@ module Caboodle
       end
       
       def stylesheets array_of_css_files
-        array_of_css_files.each do |a|
-          Caboodle::Stylesheets << a
-        end
+        array_of_css_files.each { |a| Caboodle::Stylesheets << a }
         Caboodle::Stylesheets.uniq!
       end
       
       def javascripts array_of_js_files
-        array_of_js_files.each do |a|
-          Caboodle::Javascripts << a
-        end
+        array_of_js_files.each { |a| Caboodle::Javascripts << a }
         Caboodle::Javascripts.uniq!
       end
       
