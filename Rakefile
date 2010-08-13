@@ -15,7 +15,7 @@ begin
     gem.add_dependency "hashie", ">=0.2.0"
     gem.add_dependency "haml", ">=3.0.12"
     gem.add_dependency "compass", ">=0.10.2"
-    gem.add_dependeny "compass-susy-plugin", ">=0.7.0"
+    gem.add_dependency "compass-susy-plugin", ">=0.7.0"
     gem.add_dependency "sinatra-compass", ">=0.5.0"
     gem.add_dependency "sinatra-advanced-routes", ">=0.5.1"
     gem.add_dependency "sinatra-content-for",">=0.2.0"
