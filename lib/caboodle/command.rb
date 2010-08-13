@@ -18,16 +18,21 @@ module Caboodle
           puts `cd #{args.first} && git push heroku master`
           
         when /kit:add/
-          unless Caboodle::Site.kits.include?(args.first.capitalize)
-            Caboodle::Kit.load_kit args.first.capitalize
-            puts "Dump config"
-            Caboodle::Kit.dump_config
-            puts "Pushing to Heroku"
-            puts `git add .`
-            puts `git commit -m"kit:add #{args}" -a`
-            puts `git push heroku master`
-            puts "Done!"
-          end
+          Caboodle::Kit.load_kit args.first.capitalize
+          puts "Dump config"
+          Caboodle::Kit.dump_config
+          puts "Pushing to Heroku"
+          puts `git add .`
+          puts `git commit -m"kit:add #{args}" -a`
+          puts `git push heroku master`
+          puts "Done!"
+        when /kit:remove/
+          Caboodle::Kit.unload_kit args.first.capitalize
+          puts "Pushing to Heroku"
+          puts `git add .`
+          puts `git commit -m"kit:remove #{args}" -a`
+          puts `git push heroku master`
+          puts "Done!"
         when "deploy"
           puts `git commit -m"deploy" -a`
           puts `git push heroku master`

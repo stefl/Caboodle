@@ -27,6 +27,7 @@ module Caboodle
       end
 
       def dump_config
+        puts "Dump config"
         p = File.expand_path(File.join(Caboodle::App.root,"config","site.yml"))
         d = Caboodle::Site.clone
         e = d.to_hash
@@ -57,6 +58,24 @@ module Caboodle
         Caboodle::Kits
       end
       
+      def unload_kit name
+        unless name.blank?
+          kit_name = name.to_s.split("::").last || name
+          kit_name = kit_name.downcase
+          puts "Loading Kit: #{kit_name}"
+          orig = Caboodle.constants
+          require "caboodle/kits/#{kit_name}/#{kit_name}" rescue puts "Warning! No such kit: #{kit_name}"
+          added = Caboodle.constants - orig
+          added.each do |d| 
+            c = Caboodle.const_get(d)
+            if c.respond_to?(:is_a_caboodle_kit)
+              c.unregister 
+            end
+          end
+        end
+        Caboodle::Kits
+      end
+      
       def register
         required_settings.each do |r|
           unless Caboodle::Site[r]
@@ -66,8 +85,16 @@ module Caboodle
             Caboodle::Kit.dump_config
           end
         end
+        Site.kits << self.to_s.split("::").last
+        Site.kits.uniq!
         Caboodle::Kits << self
       end
+      
+      def unregister
+        Caboodle::Kits.delete(self)
+        Caboodle::Site.kits.delete(self.to_s)
+        Caboodle::Kit.dump_config
+      end      
     
       def require_all
         if(Caboodle::Site.kits)
