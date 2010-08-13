@@ -20,10 +20,13 @@ module Caboodle
         when /kit:add/
           unless Caboodle::Site.kits.include?(args.first.capitalize)
             Caboodle::Kit.load_kit args.first.capitalize
+            puts "Dump config"
             Caboodle::Kit.dump_config
+            puts "Pushing to Heroku"
             puts `git add .`
             puts `git commit -m"kit:add #{args}" -a`
             puts `git push heroku master`
+            puts "Done!"
           end
         when "deploy"
           puts `git commit -m"deploy" -a`
