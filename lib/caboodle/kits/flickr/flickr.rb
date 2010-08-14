@@ -65,5 +65,7 @@ module Caboodle
     required [:flickr_username, :flickr_api_key]
     
     menu "Photography", "/photography"
+    
+    javascripts ["/galleria.noconflict.min.js"]
   end
 end
