@@ -155,6 +155,8 @@ module Caboodle
     required [:posterous_sitename, :posterous_username, :posterous_password, :disqus]
       
     stylesheets ["http://disqus.com/stylesheets/#{Caboodle::Site.disqus}/disqus.css?v=2.0"]
+     
+    rss ["feed://stef.posterous.com/rss.xml"]
   end
 end
 

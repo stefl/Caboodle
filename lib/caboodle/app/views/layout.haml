@@ -20,6 +20,9 @@
     - Caboodle::Javascripts.each do |js|
       %script{:charset => "utf-8", :src => js, :type => "text/javascript"}
 
+    - Caboodle::RSS.each do |rss|
+      %link{:href => rss, :rel => "alternate", :type => "application/rss+xml"}/
+    
     = head
     
   %body.caboodle

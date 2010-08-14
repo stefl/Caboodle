@@ -145,6 +145,11 @@ module Caboodle
         Caboodle::Javascripts.uniq!
       end
       
+      def rss array_of_feeds
+        array_of_feeds.each { |a| Caboodle::RSS << a }
+        Caboodle::RSS.uniq!
+      end
+      
       def add_to_layout hash_of_items
         hash_of_items.each do |k,v|
           unless Caboodle::Layout[k.to_sym].blank?
