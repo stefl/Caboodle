@@ -9,6 +9,8 @@ module Caboodle
     set :public, Proc.new { File.join(root, "public") }
     set :haml, {:format => :html5 }
 
+    helpers Sinatra::CaboodleHelpers
+
     template :layout do
       @@template ||= File.open(File.join(File.dirname(__FILE__),"app","views","layout.haml")).read
     end
@@ -18,7 +20,6 @@ module Caboodle
       def inherited subclass
         c = caller[0].split(":")
         f = File.dirname(File.expand_path("#{c[0]}"))
-        puts "Subclass #{subclass} inherited from #{f}"
         views = File.join(f, "views")
         pub = File.join(f, "public")
         subclass.set :views, views if File.exists?(views)
@@ -58,7 +59,7 @@ module Caboodle
           kit_name = kit_name.downcase
           puts "Loading Kit: #{kit_name}"
           orig = Caboodle.constants
-          require "caboodle/kits/#{kit_name}/#{kit_name}" #rescue puts "Warning! No such kit: #{kit_name}"
+          require "caboodle/kits/#{kit_name}/#{kit_name}" rescue puts "Problem loading Kit: #{kit_name}"
           added = Caboodle.constants - orig
           added.each do |d| 
             c = Caboodle.const_get(d)
@@ -76,7 +77,7 @@ module Caboodle
           kit_name = kit_name.downcase
           puts "Loading Kit: #{kit_name}"
           orig = Caboodle.constants
-          require "caboodle/kits/#{kit_name}/#{kit_name}" rescue puts "Warning! No such kit: #{kit_name}"
+          require "caboodle/kits/#{kit_name}/#{kit_name}" rescue puts "Problem loading Kit: #{kit_name}"
           added = Caboodle.constants - orig
           added.each do |d| 
             c = Caboodle.const_get(d)

@@ -18,9 +18,7 @@ module Caboodle
         
     get "/cv" do
       @title = "Curriculum Vitae"
-      
       @linkedin = LinkedinAPI.new #rescue nil
-      #@linkedin.inspect
       haml :cv
     end
     

@@ -15,7 +15,7 @@ module Caboodle
     #   compass :one_stylesheet
     # end
     
-    helpers Sinatra::ContentFor
+    helpers Sinatra::CaboodleHelpers
   
     configure do
       config_path = File.expand_path(File.join(root,"config","site.yml"))

@@ -1,5 +1,4 @@
 module Caboodle
-
   class Onepage < Caboodle::Kit
         
     get "/contact" do

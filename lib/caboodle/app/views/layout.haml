@@ -4,9 +4,9 @@
     %meta{:content => "text/html; charset=utf-8", "http-equiv" => "content-type"}/
     %meta{:content => "index,follow", :name => "robots"}/
     
-    = Caboodle::Layout.meta
+    = meta
     
-    %title= @title || Caboodle::Site.title
+    %title= title
     %link{:href => "/stylesheets/screen.css", :rel => "stylesheet", :type => "text/css"}/
     
     - Caboodle::Stylesheets.each do |css|
@@ -20,14 +20,14 @@
     - Caboodle::Javascripts.each do |js|
       %script{:charset => "utf-8", :src => js, :type => "text/javascript"}
 
-    = Caboodle::Layout.head
+    = head
     
   %body.caboodle
-    = Caboodle::Layout.before_page
+    = before_page
     #page.hfeed
-      = Caboodle::Layout.before_header
+      = before_header
       %header#site-header
-        = Caboodle::Layout.above_header
+        = above_header
         - if Caboodle::Site.logo_url
           #logo
             %a{:href => "/", :rel => "home", :title => Caboodle::Site.title }
@@ -37,16 +37,15 @@
             %h1
               %a{:href => "/", :rel => "home", :title => Caboodle::Site.title }
                 = Caboodle::Site.title
-        - if Caboodle::Site.description
+        - if description
           #site-description
             %h2= Caboodle::Site.description
-        - if Caboodle::Site.has_access
-          #access
-            .skip-link
-              %a{:href => "#content", :title => "Skip navigation to the content"} Skip to content
+        #access
+          .skip-link
+            %a{:href => "#content", :title => "Skip navigation to the content"} Skip to content
         
         - if Caboodle::MenuItems.size > 0
-          = Caboodle::Layout.before_nav
+          = before_nav
           %nav
             %ul
               %li
@@ -57,24 +56,24 @@
                   %a{:href=>p[:link]}
                     = p[:display]
             
-        = Caboodle::Layout.below_header
-      = Caboodle::Layout.after_header
-      = Caboodle::Layout.before_main
+        = below_header
+      = after_header
+      = before_main
       %section#main
         - if @title
           %header#page_title
             %h1
               = @title
-        = Caboodle::Layout.before_content
+        = before_content
         %section#content
-          = Caboodle::Layout.above_content
+          = above_content
           = yield
-          = Caboodle::Layout.below_content
-        = Caboodle::Layout.after_content
-      = Caboodle::Layout.after_main
-      = Caboodle::Layout.before_footer
+          = below_content
+        = after_content
+      = after_main
+      = before_footer
       %footer#footer
-        = Caboodle::Layout.above_footer
+        = above_footer
         - if Caboodle::Site.has_footer
           %p
             \&copy; 
@@ -84,7 +83,7 @@
               Powered by 
               %a{:href=>"http://github.com/steflewandowski/caboodle"}
                 Caboodle
-        = Caboodle::Layout.below_footer     
-      = Caboodle::Layout.after_footer
-    = Caboodle::Layout.after_page
-  = Caboodle::Layout.after_body
+        = below_footer     
+      = after_footer
+    = after_page
+  = after_body

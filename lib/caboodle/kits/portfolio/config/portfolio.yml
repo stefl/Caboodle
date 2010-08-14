@@ -1,0 +1,16 @@
+:portfolio_years:
+  2010:
+    - 
+      title: Something I did
+      description: What exactly was it
+      link: http://google.com
+      role: Googling it
+      tags: google searching
+  2009:
+    -
+      title: Something else I did
+      role: Yahooing
+      description: Using Yahoo instead
+      link: http://yahoo.com
+      tags: yahoo searching
+    
