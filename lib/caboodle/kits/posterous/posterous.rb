@@ -147,7 +147,7 @@ module Caboodle
     	haml :post, :locals => { :post => post }
     end
     
-    get "/" do
+    menu "Blog", "/blog" do
       @posts = Post.all(:page=>(params[:page] || 1))
       haml :posts.to_sym
     end
@@ -157,6 +157,8 @@ module Caboodle
     stylesheets ["http://disqus.com/stylesheets/#{Caboodle::Site.disqus}/disqus.css?v=2.0"]
      
     rss ["feed://stef.posterous.com/rss.xml"]
+    
+    original "http://#{Caboodle::Site.posterous_sitename}.posterous.com"
   end
 end
 

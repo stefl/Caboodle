@@ -26,6 +26,8 @@
     
     = head
     
+    = root
+    
   %body.caboodle
     = before_page
     #page.hfeed
@@ -41,7 +43,7 @@
             %h1
               %a{:href => "/", :rel => "home", :title => Caboodle::Site.title }
                 = Caboodle::Site.title
-        - if description
+        - if Caboodle::Site.description
           #site-description
             %h2= Caboodle::Site.description
         #access
@@ -52,9 +54,6 @@
           = before_nav
           %nav
             %ul
-              %li
-                %a{:href=>"/"}
-                  = Caboodle::Site.home_title
               - Caboodle::MenuItems.each do |p|
                 %li
                   %a{:href=>p[:link]}
@@ -74,6 +73,13 @@
           = yield
           = below_content
         = after_content
+        - if credit
+          = before_credit
+          %section#credit
+            = above_credit
+            = credit
+            = below_credit
+          = after_credit
       = after_main
       = before_footer
       %footer#footer

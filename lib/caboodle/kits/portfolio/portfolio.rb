@@ -11,11 +11,10 @@ module Caboodle
       end
     end
         
-    get "/portfolio" do
+    menu "Portfolio", "/portfolio" do
       @title = "Portfolio"
       haml :portfolio
     end
     
-    menu "Portfolio", "/portfolio"
   end
 end

@@ -1,13 +1,13 @@
 module Caboodle
   class Onepage < Caboodle::Kit
         
-    get "/contact" do
+    menu "Contact", "/contact" do
       @title = "Contact"
       haml :contact
     end
     
-    menu "Contact", "/contact"
-    
     required [:onepage_username]
+    
+    original "http://myonepage.com/#{Caboodle::Site.onepage_username}"
   end
 end

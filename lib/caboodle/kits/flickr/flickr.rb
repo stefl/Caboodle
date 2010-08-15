@@ -44,14 +44,10 @@ module Caboodle
 
   class Flickr < Caboodle::Kit
     
-    def home
+    menu "Photography", "/photography" do
       @photosets = FlickrAPI.photosets rescue []
       @title = "Photography"
       haml :photography
-    end
-    
-    get "/photography" do
-      home
     end
     
     get "/photography/:set_id" do |set_id|
@@ -64,8 +60,8 @@ module Caboodle
     
     required [:flickr_username, :flickr_api_key]
     
-    menu "Photography", "/photography"
-    
     javascripts ["/galleria.noconflict.min.js"]
+    
+    original "http://flickr.com/#{Caboodle::Site.flickr_username}"
   end
 end

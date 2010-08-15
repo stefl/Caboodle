@@ -1,13 +1,13 @@
 module Caboodle
   class Twitter < Caboodle::Kit
     
-    get "/twitter" do
+    menu "Twitter", "/twitter" do
       @title = "Twitter"
       haml :twitter
     end
     
-    menu "Twitter", "/twitter"
-    
     required [:twitter_username]
+    
+    original "http://twitter.com/#{Caboodle::Site.twitter_username}"
   end
 end

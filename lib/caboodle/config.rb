@@ -12,5 +12,4 @@ module Caboodle
   
   Site.required_settings = []
   Site.kits = [] unless Site.kits
-  puts Site.inspect
 end

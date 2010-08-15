@@ -1,14 +1,12 @@
 module Caboodle
   class Soundcloud < Caboodle::Kit
     
-    get "/mixes" do
+    menu "Mixes", "/mixes" do
       @title = "Mixes"
       @mixes = SoundcloudAPI.sets
       haml :soundcloud
     end
-    
-    menu "Mixes", "/mixes"
-    
+
     required [:soundcloud_query]
   end
 

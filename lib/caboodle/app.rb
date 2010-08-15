@@ -1,5 +1,4 @@
 module Caboodle
-  
   class App < Sinatra::Base
     register Sinatra::Compass
       
@@ -22,9 +21,7 @@ module Caboodle
       if File.exists?(config_path)
         Caboodle::Kit.load_config(config_path)
         Caboodle::Kit.setup
-      end
-      
-      puts Caboodle::Site.inspect
+      end      
     end
     # get '/:kit/stylesheet.css' do
     #   header 'Content-Type' => 'text/css; charset=utf-8'

@@ -16,14 +16,14 @@ module Caboodle
 
   class Linkedin < Caboodle::Kit
         
-    get "/cv" do
+    menu "CV", "/cv" do
       @title = "Curriculum Vitae"
       @linkedin = LinkedinAPI.new #rescue nil
       haml :cv
     end
     
-    menu "CV", "/cv"
-    
     required [:linkedin_full_name, :linkedin_profile_url]
+    
+    original Caboodle::Site.linkedin_profile_url
   end
 end

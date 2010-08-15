@@ -1,7 +1,7 @@
 module Caboodle
   class Github < Caboodle::Kit
         
-    get "/code" do
+    menu "Code", "/code" do
       @title = "Code"
       @repos = GithubAPI.repositories
       
@@ -15,11 +15,11 @@ module Caboodle
       haml :github
     end
     
-    menu "Code", "/code"
-    
     required [:github_username]
     
     defaults []
+    
+    original "http://gitbhu.com/#{Site.github_username}"
   end
 
   class GithubAPI < Weary::Base

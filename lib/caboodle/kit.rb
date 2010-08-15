@@ -59,7 +59,7 @@ module Caboodle
           kit_name = kit_name.downcase
           puts "Loading Kit: #{kit_name}"
           orig = Caboodle.constants
-          require "caboodle/kits/#{kit_name}/#{kit_name}" rescue puts "Problem loading Kit: #{kit_name}"
+          require "caboodle/kits/#{kit_name}/#{kit_name}" #rescue puts "Problem loading Kit: #{kit_name}"
           added = Caboodle.constants - orig
           added.each do |d| 
             c = Caboodle.const_get(d)
@@ -77,7 +77,7 @@ module Caboodle
           kit_name = kit_name.downcase
           puts "Loading Kit: #{kit_name}"
           orig = Caboodle.constants
-          require "caboodle/kits/#{kit_name}/#{kit_name}" rescue puts "Problem loading Kit: #{kit_name}"
+          require "caboodle/kits/#{kit_name}/#{kit_name}" #rescue puts "Problem loading Kit: #{kit_name}"
           added = Caboodle.constants - orig
           added.each do |d| 
             c = Caboodle.const_get(d)
@@ -101,12 +101,14 @@ module Caboodle
         Site.kits << self.to_s.split("::").last
         Site.kits.uniq!
         Caboodle::Kits << self
+        Caboodle::Kits
       end
       
       def unregister
         Caboodle::Kits.delete(self)
         Caboodle::Site.kits.delete(self.to_s)
         Caboodle::Kit.dump_config
+        Caboodle::Kits
       end      
     
       def require_all
@@ -115,14 +117,17 @@ module Caboodle
         else
           STDERR.puts "Kits not registered"
         end
+        Caboodle::Kits
       end
     
       def use_all
         Caboodle::Kits.each { |p| p.start }
       end
     
-      def menu display, link
-        Caboodle::MenuItems << {:display=>display, :link=>link}
+      def menu display, path, &block
+        path = "/" if Site.home_kit == self.to_s.gsub("Caboodle::","")
+        Caboodle::MenuItems << {:display=>display, :link=>path}
+        self.get path, &block
       end
     
       def required keys
@@ -133,20 +138,37 @@ module Caboodle
         else
           self.required_settings << keys
         end
+        self.required_settings
       end
       
       def stylesheets array_of_css_files
-        array_of_css_files.each { |a| Caboodle::Stylesheets << a }
+        if array_of_css_files.class == Array
+          array_of_css_files.each { |a| Caboodle::Stylesheets << a.to_s }
+        else
+          Caboodle::Stylesheets << array_of_css_files.to_s
+        end
         Caboodle::Stylesheets.uniq!
       end
       
+      alias_method :stylesheet, :stylesheets
+      
       def javascripts array_of_js_files
-        array_of_js_files.each { |a| Caboodle::Javascripts << a }
+        if array_of_js_files.class == Array
+          array_of_js_files.each { |a| Caboodle::Javascripts << a.to_s }
+        else
+          Caboodle::Javascripts << array_of_js_files.to_s
+        end
         Caboodle::Javascripts.uniq!
       end
       
+      alias_method :javascript, :javascripts
+      
       def rss array_of_feeds
-        array_of_feeds.each { |a| Caboodle::RSS << a }
+        if array_of_feeds.class == Array
+          array_of_feeds.each { |a| Caboodle::RSS << a.to_s }
+        else
+          Caboodle::RSS << array_of_feeds.to_s
+        end
         Caboodle::RSS.uniq!
       end
       
@@ -166,6 +188,10 @@ module Caboodle
         if hash.class == Hash
           hash.each {|k,v| Site[k] = v }
         end
+      end
+      
+      def original url
+        set :credit, "<a href='#{url}' rel='me'>via #{self.class.name.split("::").last}</a>"
       end
     
       def required_settings
