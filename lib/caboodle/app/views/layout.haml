@@ -53,12 +53,18 @@
         - if Caboodle::MenuItems.size > 0
           = before_nav
           %nav
+            = above_nav
             %ul
               - Caboodle::MenuItems.each do |p|
                 %li
+                  = above_nav_item
                   %a{:href=>p[:link]}
+                    = above_nav_item_title
                     = p[:display]
-            
+                    = below_nav_item_title
+                  = below_nav_item
+            = below_nav
+          = after_nav
         = below_header
       = after_header
       = before_main
