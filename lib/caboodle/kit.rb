@@ -126,7 +126,7 @@ module Caboodle
     
       def menu display, path, &block
         path = "/" if Site.home_kit == self.to_s.gsub("Caboodle::","")
-        Caboodle::MenuItems << {:display=>display, :link=>path}
+        Caboodle::MenuItems << {:display=>display, :link=>path, :kit=>self}
         self.get path, &block
       end
     

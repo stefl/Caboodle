@@ -52,13 +52,15 @@
         
         - if Caboodle::MenuItems.size > 0
           = before_nav
-          %nav
+          %nav#menu
             = above_nav
-            %ul
+            %ul#menu_items
               - Caboodle::MenuItems.each do |p|
+                - link_class = "menu_item"
+                - link_class << " active" if p[:kit] == self.class
                 %li
                   = above_nav_item
-                  %a{:href=>p[:link]}
+                  %a{:href=>p[:link], :class=>link_class}
                     = above_nav_item_title
                     = p[:display]
                     = below_nav_item_title
