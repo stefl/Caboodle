@@ -132,7 +132,7 @@ module Caboodle
 
   class Posterous < Caboodle::Kit
   
-    get "/page/:page_number" do |page_number|
+    get "/blog/:page_number" do |page_number|
       @posts = Post.page(page_number) rescue nil
       not_found if @posts.class == Array && @posts.blank?
       haml :posts
