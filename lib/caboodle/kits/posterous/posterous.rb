@@ -74,7 +74,7 @@ module Caboodle
       p = PosterousAPI.new
       opts[:site_id] = Caboodle::Site.posterous_site_id 
       rsp = p.all(opts).perform_sleepily.parse["rsp"]
-      rsp["post"].each{|a| r << Post.new(a)} if rsp["post"]
+      rsp["post"].each{|a| r << PosterousPost.new(a)} if rsp["post"]
       r
     end
   
