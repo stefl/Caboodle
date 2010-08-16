@@ -42,7 +42,7 @@ module Caboodle
     
   end
 
-  class Post
+  class PosterousPost
   
     attr_accessor :attributes
   
@@ -60,12 +60,12 @@ module Caboodle
       STDERR.puts "Opts: #{opts.inspect}"
       STDERR.puts "Perma: #{perma}"
       opts["date"] = Date.parse(perma)
-      Post.new(opts)
+      PosterousPost.new(opts)
     end
   
     def self.page(num)
       raise "must be page 1 or more" if num.to_i < 1
-      Post.all(:page=>num.to_i)
+      PosterousPost.all(:page=>num.to_i)
     end
   
     def self.all(opts={})
@@ -79,7 +79,7 @@ module Caboodle
     end
   
     def self.get(slug)
-      Post.new(PosterousAPI.new.all().perform.parse)
+      PosterousPost.new(PosterousAPI.new.all().perform.parse)
     end
   
     def [] k
@@ -129,18 +129,18 @@ module Caboodle
       self.link.split(".posterous.com/").last.split("/").last
     end
   end
-
+  
   class Posterous < Caboodle::Kit
   
     get "/blog/:page_number" do |page_number|
-      @posts = Post.page(page_number) rescue nil
+      @posts = PosterousPost.page(page_number) rescue nil
       not_found if @posts.class == Array && @posts.blank?
       haml :posts
     end
 
     get "/:year/:month/:slug" do |year, month, slug|
       STDERR.puts "Get a post"
-    	post = Post.from_slug(slug) rescue nil
+    	post = PosterousPost.from_slug(slug) rescue nil
     	STDERR.puts "Slug not found: #{slug}"
     	not_found unless post
     	@title = post.title
@@ -148,7 +148,7 @@ module Caboodle
     end
     
     menu "Blog", "/blog" do
-      @posts = Post.all(:page=>(params[:page] || 1))
+      @posts = PosterousPost.all(:page=>(params[:page] || 1))
       haml :posts.to_sym
     end
     
