@@ -1,0 +1,13 @@
+- if ENV["RACK_ENV"] == "development"
+  :javascript
+    var disqus_developer = true;
+    
+#disqus.page
+  - if Caboodle::Site.disqus
+    #disqus_thread
+    %script{:src => "http://disqus.com/forums/#{Caboodle::Site.disqus}/embed.js", :type => "text/javascript"}
+    %noscript
+      %a{:href => "http://#{Caboodle::Site.disqus}.disqus.com/?url=ref"} View the discussion thread.
+    %a.dsq-brlink{:href => "http://disqus.com"}
+      Discussion powered by
+      %span.logo-disqus Disqus
