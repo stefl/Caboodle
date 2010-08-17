@@ -15,6 +15,10 @@ module Caboodle
       @@template ||= File.open(File.join(File.dirname(__FILE__),"app","views","layout.haml")).read
     end
     
+    before do
+      response.headers['Cache-Control'] = 'public, max-age=600'
+    end
+    
     class << self
       
       def inherited subclass
