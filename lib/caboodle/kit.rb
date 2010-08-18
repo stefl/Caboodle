@@ -16,7 +16,8 @@ module Caboodle
     end
     
     before do
-      response.headers['Cache-Control'] = 'public, max-age=600'
+      Caboodle::Site.cache_for ||= 600
+      response.headers['Cache-Control'] = "public, max-age=#{Caboodle::Site.cache_for}"
     end
     
     class << self
