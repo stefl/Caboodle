@@ -69,7 +69,7 @@ header#site-header {
 section#main {
   @include full;
   header#page_title
-   {
+  {
     h1, h2 {
       @include adjust-font-size-to(48px);
       color: #aaa;
@@ -213,11 +213,11 @@ section.subsection {
     @include trailer(2,32px);
     @include columns(8,8);
     -moz-column-count: 2;
-  	-moz-column-gap: 32px;
-  	-webkit-column-count: 2;
-  	-webkit-column-gap: 32px;
-  	column-count: 2;
-  	column-gap: 32px;
+    -moz-column-gap: 32px;
+    -webkit-column-count: 2;
+    -webkit-column-gap: 32px;
+    column-count: 2;
+    column-gap: 32px;
     dl {
       dt {
         
@@ -258,29 +258,28 @@ section.subsection {
     @include trailer(2,32px);
     @include pad(1,1);
     .tweet {
-       display: block;
-       background-color: #fff;
-       @include box-shadow(0px, 0px, 16px, #aaaaaa);
-       @include padding-leader(1,32px);
-       @include padding-trailer(1,32px);
-       @include pad(1,1);
-       a.status_link {
-         display: block;
-         position: relative;
-         z-index: 2;
-         left: -32px;
-       }
-     }
+      display: block;
+      background-color: #fff;
+      @include box-shadow(0px, 0px, 16px, #aaaaaa);
+      @include padding-leader(1,32px);
+      @include padding-trailer(1,32px);
+      @include pad(1,1);
+      a.status_link {
+        display: block;
+        position: relative;
+        z-index: 2;
+        left: -32px;
+      }
+    }
   }
   #overlay {  
     img {
       @include trailer(1,32px);
     }
   }
-
 }
 
-#onepage {
+.page {
   iframe {
     width: 580px;
     height: 580px;
@@ -289,4 +288,8 @@ section.subsection {
     overflow: hidden;
     scroll: none;
   }
+}
+
+#testing {
+  background-color: red;
 }
