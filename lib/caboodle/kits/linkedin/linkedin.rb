@@ -25,5 +25,8 @@ module Caboodle
     required [:linkedin_full_name, :linkedin_profile_url]
     
     original Caboodle::Site.linkedin_profile_url
+    
+    add_sass ["linkedin"]
+    
   end
 end

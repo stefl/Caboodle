@@ -62,6 +62,8 @@ module Caboodle
     
     javascripts ["/galleria.noconflict.min.js"]
     
+    add_sass ["photography"]
+    
     original "http://flickr.com/#{Caboodle::Site.flickr_username}"
   end
 end

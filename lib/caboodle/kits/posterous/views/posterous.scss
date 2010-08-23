@@ -1,0 +1,17 @@
+.posterous {
+  @include prefix(2);
+  #pagination {
+    @include leader(3,32px);
+    @include trailer(3,32px);
+    font-weight: bold;
+  }
+  @include columns(6,10);
+  article {
+    h2 > a {
+      display: none;
+    }
+    h2.entry-title a {
+      display: inline !important;
+    }
+  }
+}

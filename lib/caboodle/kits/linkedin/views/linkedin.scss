@@ -1,0 +1,61 @@
+#linkedin{
+  #additional-information{
+    h2 + h3 {
+      display: none;
+    }
+  }
+  
+  #additional-information {
+    .websites {
+      display: none;
+    }
+  }
+  #contact-settings, .affiliation {
+    display :none;
+  }
+  @include adjust-font-size-to(14px);
+  .showhide-link, .connections, .recommended, hr {
+    display: none;
+  }
+  h2 {
+    @include adjust-font-size-to(32px);
+    @include leader(2,32px);
+    @include trailing-border(2px,1,32px, solid);
+  }
+  
+  h3, dt {
+    @include adjust-font-size-to(24px);
+    @include slab-family;
+  }
+  
+  ul.vcalendar {
+    padding-left: 32px;
+    background-color: #eee;
+    @include padding-leader(1,32px);
+    @include padding-trailer(1,32px);
+  }
+  
+  #summary {
+    
+  }
+  #overview {
+    @include trailer(2,32px);
+    @include columns(8,8);
+    -moz-column-count: 2;
+    -moz-column-gap: 32px;
+    -webkit-column-count: 2;
+    -webkit-column-gap: 32px;
+    column-count: 2;
+    column-gap: 32px;
+    dl {
+      dt {
+        
+      }
+      dd {
+        
+      }
+    }
+  }
+  
+}
+

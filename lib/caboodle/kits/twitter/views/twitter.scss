@@ -1,0 +1,28 @@
+#twitter {
+  #tweets { 
+    background-color: #eee;
+    @include padding-leader(1,32px);
+    @include padding-trailer(1,32px);
+    @include trailer(2,32px);
+    @include pad(1,1);
+    .tweet {
+      display: block;
+      background-color: #fff;
+      @include box-shadow(0px, 0px, 16px, #aaaaaa);
+      @include padding-leader(1,32px);
+      @include padding-trailer(1,32px);
+      @include pad(1,1);
+      a.status_link {
+        display: block;
+        position: relative;
+        z-index: 2;
+        left: -32px;
+      }
+    }
+  }
+  #overlay {  
+    img {
+      @include trailer(1,32px);
+    }
+  }
+}

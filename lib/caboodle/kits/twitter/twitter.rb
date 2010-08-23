@@ -9,5 +9,7 @@ module Caboodle
     required [:twitter_username]
     
     original "http://twitter.com/#{Caboodle::Site.twitter_username}"
+    
+    add_sass ["twitter"]
   end
 end
