@@ -1,0 +1,21 @@
+
+#history {
+  dl {
+    @include no-style-list;
+    border: 0px !important;
+    dt {
+      @include adjust-font-size-to(24px);
+      @include slab-family;
+      @include columns(1,6);
+      border: 0px !important;
+    }
+    dd {
+      @include columns(4,6);
+      border: 0px !important;
+      .awards {
+        @include adjust-font-size-to(12px);
+      }
+    }
+  }
+}
+

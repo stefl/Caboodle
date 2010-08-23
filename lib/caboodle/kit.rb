@@ -154,6 +154,15 @@ module Caboodle
         Caboodle::Stylesheets.uniq!
       end
       
+      def add_sass array_of_sass_files
+        if array_of_sass_files.class == Array
+          array_of_sass_files.each { |a| Caboodle::SASS << a.to_s }
+        else
+          Caboodle::SASS << array_of_sass_files.to_s
+        end
+        Caboodle::SASS.uniq!
+      end
+      
       alias_method :stylesheet, :stylesheets
       
       def javascripts array_of_js_files

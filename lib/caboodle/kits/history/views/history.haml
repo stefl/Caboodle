@@ -1,12 +1,12 @@
 - #todo - this should be a vcalendar
-#portfolio.page
+#history.page
   %dl
-    - if Caboodle::Site.portfolio_years.respond_to?(:sort)
-      - Caboodle::Site.portfolio_years.sort.reverse.each do |year,items|
+    - if Caboodle::Site.history_years.respond_to?(:sort)
+      - Caboodle::Site.history_years.sort.reverse.each do |year,items|
         %dt.year{:class=>year}
           = year
         %dd
-          %ul.portfolio_items
+          %ul.history_items
             - if items.respond_to?(:each)
               - items.each do |item|
                 %li.portfolio_item{:class=>item.tags}
