@@ -8,6 +8,6 @@ module Caboodle
     
     required [:onepage_username]
     
-    original "http://myonepage.com/#{Caboodle::Site.onepage_username}"
+    credit "http://myonepage.com/#{Caboodle::Site.onepage_username}"
   end
 end

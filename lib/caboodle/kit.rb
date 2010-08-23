@@ -20,6 +20,7 @@ module Caboodle
     end
     
     class << self
+      attr_accessor :credit_link
       
       def inherited subclass
         c = caller[0].split(":")
@@ -203,8 +204,11 @@ module Caboodle
         end
       end
       
-      def original url
-        set :credit, "<a href='#{url}' rel='me'>via #{self.class.name.split("::").last}</a>"
+      def credit url
+        #todo there must be an easier way
+        class_eval "def credit_link
+        \"<a rel='me' href='#{url}' rel='me'>#{self.name.split("::").last}</a>\"
+        end"
       end
     
       def required_settings

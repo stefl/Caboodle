@@ -19,7 +19,7 @@ module Caboodle
     
     defaults []
     
-    original "http://gitbhu.com/#{Site.github_username}"
+    credit "http://gitbhu.com/#{Site.github_username}"
   end
 
   class GithubAPI < Weary::Base

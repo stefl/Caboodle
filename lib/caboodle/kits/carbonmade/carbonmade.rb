@@ -8,6 +8,6 @@ module Caboodle
     
     required [:carbonmade_url]
     
-    original Caboodle::Site.carbonmade_url
+    credit Caboodle::Site.carbonmade_url
   end
 end

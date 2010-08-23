@@ -8,6 +8,8 @@ module Caboodle
     end
 
     required [:soundcloud_query]
+    
+    credit "http://soundcloud.com"
   end
 
   class SoundcloudAPI < Weary::Base

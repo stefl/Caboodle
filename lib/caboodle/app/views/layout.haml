@@ -82,11 +82,11 @@
           = yield
           = below_content
         = after_content
-        - if credit
+        - if self.credit_link
           = before_credit
           %section#credit
             = above_credit
-            = credit
+            = self.credit_link
             = below_credit
           = after_credit
       = after_main

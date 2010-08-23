@@ -64,6 +64,6 @@ module Caboodle
     
     add_sass ["photography"]
     
-    original "http://flickr.com/#{Caboodle::Site.flickr_username}"
+    credit "http://flickr.com/#{Caboodle::Site.flickr_username}"
   end
 end
