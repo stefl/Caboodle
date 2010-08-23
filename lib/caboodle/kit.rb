@@ -21,6 +21,14 @@ module Caboodle
     
     class << self
       attr_accessor :credit_link
+        
+      def configure
+        config_path = File.expand_path(File.join(Caboodle::App.root,"config","site.yml"))
+        if File.exists?(config_path)
+          Caboodle::Kit.load_config(config_path)
+          Caboodle::Kit.setup
+        end
+      end
       
       def inherited subclass
         c = caller[0].split(":")
@@ -45,12 +53,16 @@ module Caboodle
       end
 
       def dump_config
-        puts "Dump config"
-        p = File.expand_path(File.join(Caboodle::App.root,"config","site.yml"))
-        d = Caboodle::Site.clone
-        e = d.to_hash
-        e.delete("required_settings")
-        File.open(p, 'w') {|f| f.write(YAML::dump(e))}
+        begin
+          puts "Dump config"
+          p = File.expand_path(File.join(Caboodle::App.root,"config","site.yml"))
+          d = Caboodle::Site.clone
+          e = d.to_hash
+          e.delete("required_settings")
+          File.open(p, 'w') {|f| f.write(YAML::dump(e))}
+        rescue
+          puts "Cannot write config file"
+        end
       end
 
       def setup
@@ -230,6 +242,7 @@ module Caboodle
           STDERR.puts " "
           STDERR.puts "Warning - #{self.ancestors.first} is disabled because:"
           STDERR.puts errors.join("\n") 
+          Caboodle::Errors << Hashie::Mash.new(:title=>"#{self.ancestors.first} is disable", :reason=>errors.join(";"))
         end
       end
     end
