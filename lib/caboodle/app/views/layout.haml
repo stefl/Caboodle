@@ -14,7 +14,6 @@
     
     %link{:href => Caboodle::Site.url_base, :rel => "index", :title => Caboodle::Site.title}/
    
-    %script{:charset => "utf-8", :src => "http://ajax.googleapis.com/ajax/libs/jquery/#{Caboodle::Site.jquery_version || "1.4.2"}/jquery.min.js", :type => "text/javascript"}
     %script{:charset => "utf-8", :src => "/js/application.js", :type => "text/javascript"}
 
     - Caboodle::Javascripts.each do |js|

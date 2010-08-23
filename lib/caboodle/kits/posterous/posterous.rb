@@ -132,7 +132,7 @@ module Caboodle
   
   class Posterous < Caboodle::Kit
   
-    get "/blog/:page_number" do |page_number|
+    get "/posterous/:page_number" do |page_number|
       @posts = PosterousPost.page(page_number) rescue nil
       not_found if @posts.class == Array && @posts.blank?
       haml :posts
@@ -147,8 +147,8 @@ module Caboodle
     	haml :post, :locals => { :post => post }
     end
     
-    menu "Blog", "/blog" do
-      @posts = PosterousPost.all(:page=>(params[:page] || 1))
+    menu "Blog", "/posterous" do
+      @posts = PosterousPost.all(:page=>(params[:page] || 1)) rescue []
       haml :posts.to_sym
     end
     
