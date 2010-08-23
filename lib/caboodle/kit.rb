@@ -1,7 +1,6 @@
 module Caboodle
   
   class Kit < Sinatra::Base
-    #register Sinatra::Compass
     
     set :app_file, __FILE__
     set :logging, true

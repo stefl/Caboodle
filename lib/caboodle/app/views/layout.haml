@@ -8,10 +8,9 @@
     = meta
     
     %title= title
-    %link{:href => "/stylesheets/screen.css", :rel => "stylesheet", :type => "text/css"}/
     
     - Caboodle::Stylesheets.each do |css|
-      %link{:rel => "stylesheet", :rel => css, :type => "text/css"}    
+      %link{:rel => "stylesheet", :href => css, :type => "text/css"}    
     
     %link{:href => Caboodle::Site.url_base, :rel => "index", :title => Caboodle::Site.title}/
    
