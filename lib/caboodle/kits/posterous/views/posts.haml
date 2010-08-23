@@ -5,8 +5,20 @@
   - else
     - @posts.each do |post|
       = haml :_post, :layout=>false, :locals=>{:post=>post}
-    #pagination
-      Pagination here
+    %nav#pagination
+      - page = params[:page].to_i if defined?(params[:page])
+      - page ||= 1
+      - page = 1 if page < 1
+      #next
+        - if page > 1
+          %a{:href=>"/posterous/#{page-1}"}
+            Next
+      
+      #previous
+        - if @posts
+          %a{:href=>"/posterous/#{page+1}"}
+            Previous
+      
     - if Caboodle::Site.disqus
       :javascript
         (function() {
