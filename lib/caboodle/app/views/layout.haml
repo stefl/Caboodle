@@ -77,6 +77,13 @@
           = below_social
         = after_social 
         = before_content
+        - if Caboodle::Errors.size > 0
+          %section#errors
+            - Caboodle::Errors.each do |err|
+              %h2
+                = err.title
+              %p.reason
+                = err.reason
         %section#content
           = above_content
           = yield

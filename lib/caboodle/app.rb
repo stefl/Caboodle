@@ -10,11 +10,7 @@ module Caboodle
     helpers Sinatra::CaboodleHelpers
     
     configure do
-      config_path = File.expand_path(File.join(root,"config","site.yml"))
-      if File.exists?(config_path)
-        Caboodle::Kit.load_config(config_path)
-        Caboodle::Kit.setup
-      end      
+      Caboodle::Kit.configure
     end
   
   end
