@@ -5,10 +5,6 @@ module Sinatra
       Caboodle::Layout[arg]
     end
     
-    def credit
-      #Caboodle::Kit.credit
-    end
-    
     def title
       if request.path_info == "/"
         "#{Caboodle::Site.title} | #{Caboodle::Site.description}"

@@ -158,7 +158,7 @@ module Caboodle
      
     rss ["feed://stef.posterous.com/rss.xml"]
     
-    original "http://#{Caboodle::Site.posterous_sitename}.posterous.com"
+    credit "http://#{Caboodle::Site.posterous_sitename}.posterous.com"
     
     add_sass ["posterous"]
   end
