@@ -13,11 +13,12 @@ module Caboodle
   class Susy < Caboodle::Kit
             
     get("/susy/:name.css") do
-      
+      puts "*** root"
+      puts Caboodle::App.root
       content_type 'text/css', :charset => 'utf-8'
       sass_dir = File.expand_path(File.join(File.dirname(__FILE__),"views","susy"))
       #puts sass_dir
-      load_paths = [sass_dir] + ::Compass.sass_engine_options[:load_paths]
+      load_paths = [Caboodle::App.root, File.join(Caboodle::App.root,"views"), File.join(Caboodle::App.root,"views","stylesheets"), sass_dir] + ::Compass.sass_engine_options[:load_paths]
       #puts load_paths.inspect
       Caboodle::Kits.each do |name|
         kit_name = name.to_s.split("::").last || name
