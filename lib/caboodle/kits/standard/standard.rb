@@ -2,8 +2,10 @@ module Caboodle
   class Standard < Caboodle::Kit
     required [:title, :description, :logo_url, :author]
     
-    get "/" do
-      haml "%h2 The default home page"
+    if Caboodle::Site.home_kit.to_s.blank?   
+      get "/" do
+        haml :standard
+      end
     end
   end
 end
