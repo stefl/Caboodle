@@ -26,6 +26,10 @@ module Caboodle
           puts `git commit -m"kit:add #{args}" -a`
           puts `git push heroku master`
           puts "Done!"
+        when /kit:home/
+          if Caboodle::Kit.available_kits.include?(args.first.capitalize)
+            Caboodle::Site.home_kit = args.first.capitalize
+          end
         when /kit:remove/
           Caboodle::Kit.unload_kit args.first.capitalize
           puts "Pushing to Heroku"
