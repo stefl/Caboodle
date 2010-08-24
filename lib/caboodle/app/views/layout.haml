@@ -25,7 +25,15 @@
         
   %body.caboodle
     = before_page
+    
     #page.hfeed
+      - if Caboodle::Errors.size > 0
+        %section#errors
+          - Caboodle::Errors.each do |err|
+            %h2
+              = err.title
+            %p.reason
+              = err.reason
       = before_header
       %header#site-header
         = above_header
@@ -77,13 +85,6 @@
           = below_social
         = after_social 
         = before_content
-        - if Caboodle::Errors.size > 0
-          %section#errors
-            - Caboodle::Errors.each do |err|
-              %h2
-                = err.title
-              %p.reason
-                = err.reason
         %section#content
           = above_content
           = yield

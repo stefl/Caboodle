@@ -76,14 +76,23 @@ module Caboodle
           kit_name = kit_name.downcase
           puts "))) Loading Kit: #{kit_name}"
           orig = Caboodle.constants
-          require "caboodle/kits/#{kit_name}/#{kit_name}" #rescue puts "Problem loading Kit: #{kit_name}"
-          added = Caboodle.constants - orig
-          puts added
-          added.each do |d| 
-            c = Caboodle.const_get(d)
-            if c.respond_to?(:is_a_caboodle_kit)
-              puts "*** Register #{c}"
-              c.register_kit
+          begin
+            require "caboodle/kits/#{kit_name}/#{kit_name}" #rescue puts "Problem loading Kit: #{kit_name}"
+            added = Caboodle.constants - orig
+            puts added
+            added.each do |d| 
+              c = Caboodle.const_get(d)
+              if c.respond_to?(:is_a_caboodle_kit)
+                puts "*** Register #{c}"
+                c.register_kit
+              end
+            end
+          rescue Exception=>e
+            if ENV["RACK_ENV"] == "production" || 1==1
+              puts e.inspect
+              Caboodle::Errors << Hashie::Mash.new({:title=>"Failed to load #{name} kit", :reason=>e.inspect})
+            else
+              raise e
             end
           end
         end
@@ -117,10 +126,13 @@ module Caboodle
           puts "checking #{r}"
           puts "value: #{Caboodle::Site[r]}"
           if Caboodle::Site[r].blank?
-            puts "Please set a value for #{r}:"
-            v = STDIN.gets
-            Caboodle::Site[r] = v
-            Caboodle::Kit.dump_config
+            puts "Rack env #{ENV["RACK_ENV"]}"
+            unless ENV["RACK_ENV"] == "production"
+              puts "Please set a value for #{r}:"
+              v = STDIN.gets
+              Caboodle::Site[r] = v
+              Caboodle::Kit.dump_config
+            end
           end
         end
         Site.kits << name
@@ -235,12 +247,13 @@ module Caboodle
       end
     
       def required_settings
-        r = RequiredSettings[self.ancestors.first.to_s.split("::").last] ||= [:title, :description, :logo_url, :author] 
+        r = RequiredSettings[self.ancestors.first.to_s.split("::").last] ||= [] 
         RequiredSettings[self.ancestors.first.to_s.split("::").last]
       end
     
       def start
         errors = []
+        puts self.required_settings.inspect
         self.required_settings.each do |s|
           if Site[s].blank?
             errors << "    :#{s} has not been set"
