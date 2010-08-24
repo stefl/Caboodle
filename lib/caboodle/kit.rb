@@ -148,7 +148,7 @@ module Caboodle
         if(Caboodle::Site.kits)
           Caboodle::Site.kits.each { |k| load_kit k }
         else
-          STDERR.puts "Kits not registered"
+          STDERR.puts "No kits to register"
         end
         Caboodle::Kits
       end
@@ -165,7 +165,7 @@ module Caboodle
       end
       
       def has_menu?
-        @@has_menu
+        defined?(@@has_menu)
       end
       
       def required keys
@@ -249,6 +249,10 @@ module Caboodle
         RequiredSettings[self.ancestors.first.to_s.split("::").last]
       end
     
+      def available_kits
+        Dir.new(File.join(File.dirname(__FILE__),"kits")).entries.delete_if{|a| a[0,1]=="."}
+      end
+      
       def start
         errors = []
         puts self.required_settings.inspect
