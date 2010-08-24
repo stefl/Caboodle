@@ -74,22 +74,18 @@ module Caboodle
         unless name.blank?
           kit_name = name.to_s.split("::").last || name
           kit_name = kit_name.downcase
-          puts "))) Loading Kit: #{kit_name}"
           orig = Caboodle.constants
           begin
             require "caboodle/kits/#{kit_name}/#{kit_name}" #rescue puts "Problem loading Kit: #{kit_name}"
             added = Caboodle.constants - orig
-            puts added
             added.each do |d| 
               c = Caboodle.const_get(d)
               if c.respond_to?(:is_a_caboodle_kit)
-                puts "*** Register #{c}"
                 c.register_kit
               end
             end
           rescue Exception=>e
             if ENV["RACK_ENV"] == "production"
-              puts e.inspect
               Caboodle::Errors << Hashie::Mash.new({:title=>"Failed to load #{name} kit", :reason=>e.backtrace})
             else
               raise e
@@ -165,11 +161,13 @@ module Caboodle
         path = "/" if Site.home_kit == self.to_s.gsub("Caboodle::","")
         Caboodle::MenuItems << {:display=>display, :link=>path, :kit=>self}
         self.get path, &block
-        if Site.home_kit.blank?
-          Site.home_kit = name
-        end
+        @@has_menu = true
       end
-    
+      
+      def has_menu?
+        @@has_menu
+      end
+      
       def required keys
         if keys.class == Array
           keys.each do |k| 
