@@ -88,9 +88,9 @@ module Caboodle
               end
             end
           rescue Exception=>e
-            if ENV["RACK_ENV"] == "production" || 1==1
+            if ENV["RACK_ENV"] == "production"
               puts e.inspect
-              Caboodle::Errors << Hashie::Mash.new({:title=>"Failed to load #{name} kit", :reason=>e.inspect})
+              Caboodle::Errors << Hashie::Mash.new({:title=>"Failed to load #{name} kit", :reason=>e.backtrace})
             else
               raise e
             end
