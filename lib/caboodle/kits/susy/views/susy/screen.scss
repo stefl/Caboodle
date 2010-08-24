@@ -246,3 +246,15 @@ section.subsection {
 #testing {
   background-color: red;
 }
+
+section#errors {
+  background-color: #ffdddd;
+  padding: 0.5em;
+  h2 {
+    @include adjust-font-size-to(16px);
+    color: #882222;
+  }
+  .reason {
+    display: none;
+  }
+}
