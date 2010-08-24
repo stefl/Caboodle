@@ -3,7 +3,7 @@ module Caboodle
     required [:title, :description, :logo_url, :author]
     
     get "/" do
-      "The default home page"
+      haml "%h2 The default home page"
     end
   end
 end

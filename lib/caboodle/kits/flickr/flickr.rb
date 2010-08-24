@@ -1,4 +1,5 @@
 require "open-uri"
+require "nokogiri"
 
 module Caboodle
   
@@ -8,7 +9,7 @@ module Caboodle
       return Site.flickr_user_id unless Site.flickr_user_id.blank?
       unless Site.flickr_username.blank?
         url = "http://query.yahooapis.com/v1/public/yql?q=use%20%22http%3A%2F%2Fisithackday.com%2Fapi%2Fflickr.whois.xml%22%20as%20flickr.whois%3Bselect%20*%20from%20flickr.whois%20where%20owner%3D%22#{Site.flickr_username}%22&format=xml"
-        doc = Nokogiri::XML.parse(open(url).read)
+        doc = ::Nokogiri::XML.parse(open(url).read)
         val = doc.css("owner").first.attributes["nsid"].value
         Site.flickr_user_id = val
         Caboodle::Kit.dump_config
