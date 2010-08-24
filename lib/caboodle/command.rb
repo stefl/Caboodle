@@ -16,7 +16,6 @@ module Caboodle
           puts `cd #{args.first} && git add .`
           puts `cd #{args.first} && git commit -m"initial setup"`
           puts `cd #{args.first} && heroku create #{args.first}`
-          puts `cd #{args.first} && git push heroku master`
           
         when /kit:add/
           Caboodle::Kit.load_kit args.first.capitalize

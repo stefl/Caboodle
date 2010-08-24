@@ -1,14 +1,18 @@
+require "open-uri"
+
 module Caboodle
   
   class FlickrAPI < Weary::Base
   
     def self.flickr_user_id
       return Site.flickr_user_id unless Site.flickr_user_id.blank?
-      url = "http://query.yahooapis.com/v1/public/yql?q=use%20%22http%3A%2F%2Fisithackday.com%2Fapi%2Fflickr.whois.xml%22%20as%20flickr.whois%3Bselect%20*%20from%20flickr.whois%20where%20owner%3D%22#{Site.flickr_username}%22&format=xml"
-      doc = Nokogiri::XML.parse(open(url))
-      val = doc.css("owner").first.attributes["nsid"].value
-      Site.flickr_user_id = val
-      Caboodle::Kit.dump_config
+      unless Site.flickr_username.blank?
+        url = "http://query.yahooapis.com/v1/public/yql?q=use%20%22http%3A%2F%2Fisithackday.com%2Fapi%2Fflickr.whois.xml%22%20as%20flickr.whois%3Bselect%20*%20from%20flickr.whois%20where%20owner%3D%22#{Site.flickr_username}%22&format=xml"
+        doc = Nokogiri::XML.parse(open(url).read)
+        val = doc.css("owner").first.attributes["nsid"].value
+        Site.flickr_user_id = val
+        Caboodle::Kit.dump_config
+      end
       Site.flickr_user_id
     end
     
@@ -45,17 +49,25 @@ module Caboodle
   class Flickr < Caboodle::Kit
     
     menu "Photography", "/photography" do
-      @photosets = FlickrAPI.photosets rescue []
-      @title = "Photography"
-      haml :photography
+      unless Site.flickr_user_id.blank?
+        @photosets = FlickrAPI.photosets rescue []
+        @title = "Photography"
+        haml :photography
+      else
+        "<h2>Please set your Flickr username</h2>"
+      end
     end
     
     get "/photography/:set_id" do |set_id|
-      @photosets = FlickrAPI.photosets rescue []
-      @set_id = set_id
-      @photoset = Caboodle::FlickrAPI.photoset_info(@set_id) rescue nil
-      @title = "Photography: #{@photoset.title if @photoset.respond_to?(:title)}"
-      haml :photography
+      unless Site.flickr_user_id.blank?
+        @photosets = FlickrAPI.photosets rescue []
+        @set_id = set_id
+        @photoset = Caboodle::FlickrAPI.photoset_info(@set_id) rescue nil
+        @title = "Photography: #{@photoset.title if @photoset.respond_to?(:title)}"
+        haml :photography
+      else
+        "<h2>Please set your Flickr username</h2>"
+      end
     end
     
     required [:flickr_username, :flickr_api_key]
