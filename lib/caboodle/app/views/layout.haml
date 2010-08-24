@@ -29,16 +29,16 @@
       = before_header
       %header#site-header
         = above_header
-        - if Caboodle::Site.logo_url
+        - unless Caboodle::Site.logo_url.blank?
           #logo
             %a{:href => "/", :rel => "home", :title => Caboodle::Site.title }
               %img{:src=>Caboodle::Site.logo_url, :width=>"64", :height=>"64"}
-        - if Caboodle::Site.title
+        - unless Caboodle::Site.title.blank?
           #site-title
             %h1
               %a{:href => "/", :rel => "home", :title => Caboodle::Site.title }
                 = Caboodle::Site.title
-        - if Caboodle::Site.description
+        - unless Caboodle::Site.description.blank?
           #site-description
             %h2= Caboodle::Site.description
         #access

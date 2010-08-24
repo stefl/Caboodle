@@ -74,14 +74,16 @@ module Caboodle
         unless name.blank?
           kit_name = name.to_s.split("::").last || name
           kit_name = kit_name.downcase
-          puts "Loading Kit: #{kit_name}"
+          puts "))) Loading Kit: #{kit_name}"
           orig = Caboodle.constants
           require "caboodle/kits/#{kit_name}/#{kit_name}" #rescue puts "Problem loading Kit: #{kit_name}"
           added = Caboodle.constants - orig
+          puts added
           added.each do |d| 
             c = Caboodle.const_get(d)
             if c.respond_to?(:is_a_caboodle_kit)
-              c.register 
+              puts "*** Register #{c}"
+              c.register_kit
             end
           end
         end
@@ -92,36 +94,42 @@ module Caboodle
         unless name.blank?
           kit_name = name.to_s.split("::").last || name
           kit_name = kit_name.downcase
-          puts "Loading Kit: #{kit_name}"
+          puts "Unloading Kit: #{kit_name}"
           orig = Caboodle.constants
           require "caboodle/kits/#{kit_name}/#{kit_name}" #rescue puts "Problem loading Kit: #{kit_name}"
           added = Caboodle.constants - orig
           added.each do |d| 
             c = Caboodle.const_get(d)
             if c.respond_to?(:is_a_caboodle_kit)
-              c.unregister 
+              c.unregister_kit
             end
           end
         end
         Caboodle::Kits
       end
       
-      def register
+      def name
+        self.to_s.split("::").last
+      end
+      
+      def register_kit
         required_settings.each do |r|
-          unless Caboodle::Site[r]
+          puts "checking #{r}"
+          puts "value: #{Caboodle::Site[r]}"
+          if Caboodle::Site[r].blank?
             puts "Please set a value for #{r}:"
             v = STDIN.gets
             Caboodle::Site[r] = v
             Caboodle::Kit.dump_config
           end
         end
-        Site.kits << self.to_s.split("::").last
+        Site.kits << name
         Site.kits.uniq!
         Caboodle::Kits << self
         Caboodle::Kits
       end
       
-      def unregister
+      def unregister_kit
         Caboodle::Kits.delete(self)
         Caboodle::Site.kits.delete(self.to_s)
         Caboodle::Kit.dump_config
@@ -145,6 +153,9 @@ module Caboodle
         path = "/" if Site.home_kit == self.to_s.gsub("Caboodle::","")
         Caboodle::MenuItems << {:display=>display, :link=>path, :kit=>self}
         self.get path, &block
+        if Site.home_kit.blank?
+          Site.home_kit = name
+        end
       end
     
       def required keys
