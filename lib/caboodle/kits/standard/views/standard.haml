@@ -1,0 +1,25 @@
+#standard.page
+  %h2 
+    Welcome to Caboodle
+  
+  %h3 
+    Get started by adding Kits
+
+  %p
+    Add a Kit to your Caboodle by typing a command like this in your terminal:
+
+  %pre
+    caboodle kit:add flickr
+  
+  %p 
+    Then follow the on-screen commands. You can use any of the following: 
+  
+  %p
+    = Caboodle::Kit.available_kits.join(", ") 
+    \.
+    
+  %p
+    Set a home page Kit
+    
+  %pre
+    caboodle kit:home flickr
