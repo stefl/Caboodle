@@ -20,7 +20,9 @@ Please set a value for flickr_apikey
 
 h2. "WIKI":http://wiki.github.com/steflewandowski/Caboodle/
 
-This includes some pointers on how to use Caboodle without any knowledge of Ruby, Git or Heroku which Caboodle relies upon.
+"Getting started":http://wiki.github.com/steflewandowski/Caboodle/getting-started includes instructions on how to use Caboodle without any assumed knowledge of Ruby, Git or Heroku which Caboodle relies upon.
+
+"Creating a Caboodle":http://wiki.github.com/steflewandowski/Caboodle/creating-a-caboodle walks you through the process of setting up a Caboodle website.
 
 h2. Questions
 
