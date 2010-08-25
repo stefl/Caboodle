@@ -1,0 +1,31 @@
+!http://posterous.com/getfile/files.posterous.com/temp-2010-08-17/JGcuaytyAkpyFrgqaioavulpEcdrfgCGeilGpHAEzvtgAfFnimzzEJarawqG/caboodle.png.scaled1000.png!
+
+h2. Caboodle is a quick and easy way to create a mashup website
+
+A quick demonstration if you are familiar with Ruby:
+
+<pre> sudo gem install caboodle
+> caboodle create myproject
+Please set a value for title:
+> My brand new project
+Please set a value for description:
+> The full kit and Caboodle
+> cd myproject
+> caboodle kit:add flickr
+Please set a value for flickr_username
+> myproject
+Please set a value for flickr_apikey
+> b1789c432a78990b44d39ff
+> caboodle deploy</pre>
+
+h2. "WIKI":http://wiki.github.com/steflewandowski/Caboodle/
+
+This includes some pointers on how to use Caboodle without any knowledge of Ruby, Git or Heroku which Caboodle relies upon.
+
+h2. Questions
+
+"Stef on Twitter":http://twitter.com/stef
+
+h2. Copyright
+
+Copyright (c) 2010 Stef Lewandowski. Released under a MIT License. See LICENSE for details.
