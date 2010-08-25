@@ -1,20 +1,30 @@
-= caboodle
+http://posterous.com/getfile/files.posterous.com/temp-2010-08-17/JGcuaytyAkpyFrgqaioavulpEcdrfgCGeilGpHAEzvtgAfFnimzzEJarawqG/caboodle.png.scaled1000.png
 
-Caboodle is a simple way to create a quick mashup website.
+== Caboodle is a quick and easy way to create a mashup website
 
-Select which Kits to use in your site, or create your own. 
+A quick demonstration if you are familiar with Ruby:
 
-Caboodle is based on Sinatra, and each Kit is a small Sinatra application.
+  > sudo gem install caboodle
+  > caboodle create myproject
+  Please set a value for title:
+  > My brand new project
+  Please set a value for description:
+  > The full kit and Caboodle
+  > cd myproject
+  > caboodle kit:add flickr
+  Please set a value for flickr_username
+  > myproject
+  Please set a value for flickr_apikey
+  > b1789c432a78990b44d39ff
+  > caboodle deploy
 
-== Note on Patches/Pull Requests
- 
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+== Documentation and instructions[http://wiki.github.com/steflewandowski/Caboodle/]
+
+This includes some pointers on how to use Caboodle without any knowledge of Ruby, Git or Heroku which Caboodle relies upon.
+
+== Questions
+
+Stef on Twitter[http://twitter.com/stef]
 
 == Copyright
 
