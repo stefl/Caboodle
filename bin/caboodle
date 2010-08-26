@@ -11,4 +11,10 @@ args = ARGV.dup
 ARGV.clear
 command = args.shift.strip rescue 'help'
 
-Caboodle::Command.run(command, args)
+git_path = `which git`
+if git_path.blank?
+  puts "Sorry - you don't appear to have git installed or in your path"
+  puts "Please set up git and try again: http://github.com"
+else
+  Caboodle::Command.run(command, args)
+end
