@@ -6,11 +6,10 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "caboodle"
     gem.summary = "Web mashups the simple way"
-    gem.description = "Use Kits to create simple mashups."
+    gem.description = "Caboodle is a Rack and Sinatra-based framework for creating websites which combine information from various online services. There are Kits for many of the larger services, which provide a way to retrieve and display photos, videos, blog posts, status updates and so on. Caboodle normalises the display of all of these discrete Kits so that you can create a website which looks seamless but is made up of a variety of things from a variety of sources."
     gem.email = "stef@stef.io"
     gem.homepage = "http://github.com/steflewandowski/caboodle"
-    gem.authors = ["steflewandowski"]
-    gem.add_dependency "heroku", ">= 0"
+    gem.authors = ["Stef Lewandowski"]
     gem.add_dependency "sinatra", ">=1.0"
     gem.add_dependency "hashie", ">=0.2.0"
     gem.add_dependency "haml", ">=3.0.12"
@@ -18,11 +17,9 @@ begin
     gem.add_dependency "compass-susy-plugin", ">=0.7.0"
     gem.add_dependency "sinatra-compass", ">=0.5.0"
     gem.add_dependency "sinatra-advanced-routes", ">=0.5.1"
-    gem.add_dependency "sinatra-content-for",">=0.2.0"
-    gem.add_dependency "memcached",">=0.19.9"
     gem.add_dependency "nokogiri",">=1.4.0"
     gem.add_dependency "weary",">=0.7.2"
-    gem.add_dependency "sleepy",">=0.1.3"
+    gem.add_dependency "sleepy",">=0.1.4"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
