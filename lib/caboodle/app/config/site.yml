@@ -1,5 +1,6 @@
 has_footer: true
 has_caboodle_link: true
+home_kit: Standard
 kits:
 - Standard
 - Skimmed

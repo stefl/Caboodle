@@ -22,11 +22,13 @@ module Caboodle
     class << self
       attr_accessor :credit_link
         
-      def configure
-        config_path = File.expand_path(File.join(Caboodle::App.root,"config","site.yml"))
+      def configure config_path
+        set :config, config_path
         if File.exists?(config_path)
           Caboodle::Kit.load_config(config_path)
           Caboodle::Kit.setup
+        else
+          puts "No such configuration file: #{config_path}"
         end
       end
       
@@ -54,14 +56,13 @@ module Caboodle
 
       def dump_config
         begin
-          puts "Dump config"
-          p = File.expand_path(File.join(Caboodle::App.root,"config","site.yml"))
+          p = config
           d = Caboodle::Site.clone
           e = d.to_hash
           e.delete("required_settings")
           File.open(p, 'w') {|f| f.write(YAML::dump(e))}
         rescue
-          puts "Cannot write config file"
+          puts "Cannot write to config file: #{p}"
         end
       end
 
@@ -118,23 +119,41 @@ module Caboodle
       end
       
       def register_kit
-        required_settings.each do |r|
-          puts "checking #{r}"
-          puts "value: #{Caboodle::Site[r]}"
-          if Caboodle::Site[r].blank?
-            puts "Rack env #{ENV["RACK_ENV"]}"
-            unless ENV["RACK_ENV"] == "production"
-              puts "Please set a value for #{r}:"
-              v = STDIN.gets
-              Caboodle::Site[r] = v
-              Caboodle::Kit.dump_config
-            end
-          end
-        end
+        ask_user_for_missing_settings
         Site.kits << name
         Site.kits.uniq!
         Caboodle::Kits << self
         Caboodle::Kits
+      end
+      
+      def ask_user r, optional=false       
+        unless ENV["RACK_ENV"] == "production"
+          puts " "
+          opt = "Optional: " if optional
+          puts "#{opt}Please set a value for #{r}:"
+          v = STDIN.gets
+          Caboodle::Site[r] = v
+          Caboodle::Kit.dump_config
+        end
+      end
+      
+      def ask_user_for_missing_settings
+        required_settings.each do |r|
+          if Caboodle::Site[r].blank?
+            ask_user r
+          end
+        end
+        optional_settings.each do |r|
+          if Caboodle::Site[r].blank?
+            ask_user r, true
+          end
+        end
+      end
+      
+      def ask_user_for_all_missing_settings
+        Caboodle::Kits.each do |kit|
+          kit.ask_user_for_missing_settings
+        end
       end
       
       def unregister_kit
@@ -178,6 +197,16 @@ module Caboodle
         end
         self.required_settings
       end
+      
+      def optional keys
+        if keys.class == Array
+          keys.each do |k| 
+            self.optional_settings << k
+          end
+        else
+          self.optional_settings << keys
+        end
+        self.optional_settings      end
       
       def stylesheets array_of_css_files
         if array_of_css_files.class == Array
@@ -245,8 +274,13 @@ module Caboodle
       end
     
       def required_settings
-        r = RequiredSettings[self.ancestors.first.to_s.split("::").last] ||= [] 
+        RequiredSettings[self.ancestors.first.to_s.split("::").last] ||= [] 
         RequiredSettings[self.ancestors.first.to_s.split("::").last]
+      end
+      
+      def optional_settings
+        OptionalSettings[self.ancestors.first.to_s.split("::").last] ||= [] 
+        OptionalSettings[self.ancestors.first.to_s.split("::").last]
       end
     
       def available_kits
