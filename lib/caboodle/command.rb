@@ -1,23 +1,28 @@
+
 module Caboodle
   module Command
     class << self
       def run(command, args, retries=0)
         case command
         when "create"
-        
-          puts `mkdir #{args.first}`
-          puts `cd #{args.first} && cp -r #{File.expand_path(File.join(File.dirname(__FILE__), 'app'))}/* .`
-          puts `cd #{args.first} && cp #{File.expand_path(File.join(File.dirname(__FILE__), 'app'))}/.gems .`
-          puts `cd #{args.first} && git init`
-          Caboode::Kit.ask_user
-          Caboodle::Kit.configure
-          puts `cd #{args.first} && git add .`
-          puts `cd #{args.first} && git commit -m"initial setup"`
+          puts "Welcome to Caboodle!"
+          site_name = args.first
+          puts `mkdir -p #{site_name}`
+          puts `cd #{site_name} && cp -ri #{File.expand_path(File.join(File.dirname(__FILE__), 'app'))}/* .`
+          puts `cd #{site_name} && cp -i #{File.expand_path(File.join(File.dirname(__FILE__), 'app'))}/.gems .`
+          puts `cd #{site_name} && git init`
+          config = File.expand_path(File.join(".",site_name,"config","site.yml"))
+          Caboodle::Kit.configure config
+          puts "Please set a few settings to get started"
+          Caboodle::Kit.ask_user_for_all_missing_settings
+          puts `cd #{site_name} && git add .`
+          puts `cd #{site_name} && git commit -m"initial setup"`
         when /kit:add/
           Caboodle::Kit.load_kit args.first.capitalize
           puts "Dump config"
           Caboodle::Kit.dump_config
           puts "Pushing to Heroku"
+          puts "Please be patient - this could take some time the first time you do this"
           puts `git add .`
           puts `git commit -m"kit:add #{args}" -a`
           puts `git push heroku master`
