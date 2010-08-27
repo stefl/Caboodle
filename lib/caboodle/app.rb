@@ -10,7 +10,7 @@ module Caboodle
     helpers Sinatra::CaboodleHelpers
     
     configure do
-      Caboodle::Kit.configure File.expand_path(File.join(Caboodle::App.root,"config","site.yml"))
+      Caboodle::Kit.configure_site File.expand_path(File.join(Caboodle::App.root,"config","site.yml"))
     end
   
   end
