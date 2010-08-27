@@ -1,7 +1,7 @@
 #tumblr.page
   %section.tumblr_posts
     - posts.each do |post|
-      %article{:id=>"tumblr_#{post.post_id}", :class=>"hentry tumblr_post #{post.format} #{post.type} #{post.slug} #{semantic_date( Date.parse(post.date))}"}
+      %article{:id=>"tumblr_#{post.post_id}", :class=>"hentry tumblr_post #{post.format} #{post.type} #{post.slug} #{semantic_date(post)}"}
         = haml :"_#{post.type}", :layout=>false, :locals=>{:post=>post}
         %aside.entry-meta
           %span.meta-prep.meta-prep-author By

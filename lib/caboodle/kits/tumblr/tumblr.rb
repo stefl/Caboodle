@@ -5,13 +5,14 @@ module Caboodle
   class Tumblr < Caboodle::Kit   
      
     helpers do
-      def semantic_date date
+      def semantic_date post
+        date = Date.parse(post.date)
         a = []
-        a << "slug-#{slug}"
+        a << "slug-#{post.slug}"
         a << "y#{date.year}"
         a << "m#{date.month}"
         a << "d#{date.day}"
-        a
+        a.join(" ")
       end
     end
      
@@ -35,6 +36,8 @@ module Caboodle
       posts = tumblr.get_posts()
       haml :tumblr, :locals => { :posts => posts }
     end
+    
+    add_sass ["tumblr"]
     
   end
 end
