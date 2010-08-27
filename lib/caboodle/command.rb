@@ -26,12 +26,6 @@ module Caboodle
           Caboodle::Kit.load_kit args.first.capitalize
           puts "Dump config"
           Caboodle::Kit.dump_config
-          puts "Pushing to Heroku"
-          puts "Please be patient - this could take some time the first time you do this"
-          puts `git add .`
-          puts `git commit -m"kit:add #{args}" -a`
-          puts `git push heroku master`
-          puts "Done!"
         when /kit:home/
           if Caboodle::Kit.available_kits.include?(args.first.capitalize)
             Caboodle::Site.home_kit = args.first.capitalize
@@ -58,6 +52,10 @@ module Caboodle
         when /config:get/
           configure
           puts Caboodle::Site[args[0]]
+        when /config:kits/
+          puts "The following kits are loaded"
+          configure
+          puts Caboodle::Site.kits.join("\n")
         when "deploy"
           gem 'heroku'
           require 'heroku'
