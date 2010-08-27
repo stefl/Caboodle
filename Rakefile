@@ -20,6 +20,7 @@ begin
     gem.add_dependency "nokogiri",">=1.4.0"
     gem.add_dependency "weary",">=0.7.2"
     gem.add_dependency "sleepy",">=0.1.4"
+    gem.add_dependency "tumblr-rb"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError

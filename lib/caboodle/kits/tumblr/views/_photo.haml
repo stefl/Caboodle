@@ -1,0 +1,5 @@
+- if post.click_through_url
+  %a{:href=>post.click_through_url}
+    %img{:src=>post.source}
+- else
+  %img{:src=>post.source}

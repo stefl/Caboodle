@@ -15,7 +15,6 @@ module Caboodle
       
         sites.each do |site|
           if site.url.include?("http://#{Caboodle::Site.posterous_sitename}.posterous.com")
-            puts "GOT SITE ID: #{site.id}"
             Caboodle::Site.posterous_site_id = site.id
           end
         end
@@ -105,6 +104,7 @@ module Caboodle
       a << "y#{date.year}"
       a << "m#{date.month}"
       a << "d#{date.day}"
+      a
     end
   
     def url
