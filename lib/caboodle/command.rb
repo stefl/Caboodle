@@ -26,6 +26,7 @@ module Caboodle
           Caboodle::Kit.load_kit args.first.capitalize
           puts "Dump config"
           Caboodle::Kit.dump_config
+          puts `git commit -m"kit:add #{args}" -a`
         when /kit:home/
           if Caboodle::Kit.available_kits.include?(args.first.capitalize)
             Caboodle::Site.home_kit = args.first.capitalize
@@ -37,11 +38,7 @@ module Caboodle
           Caboodle::Kit.available_kits.each {|kit| puts kit}
         when /kit:remove/
           Caboodle::Kit.unload_kit args.first.capitalize
-          puts "Pushing to Heroku"
-          puts `git add .`
           puts `git commit -m"kit:remove #{args}" -a`
-          puts `git push heroku master`
-          puts "Done!"
         when /config:list/
           configure
           Caboodle::Site.each{|k,v| puts "#{k}: #{v}"}
