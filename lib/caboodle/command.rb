@@ -61,7 +61,18 @@ module Caboodle
           puts `git commit -m"deploy" -a`
           puts `git push heroku master`
         else
-          puts "Sorry, that command is not recognized"
+          puts "Sorry, that command is not recognized" unless command == "help"
+          puts "Caboodle accepts the following commands:"
+          puts " "
+          puts "caboodle create <sitename> - sets up a new caboodle"
+          puts "caboodle kit:add <kit name> - adds a specificed kit to the caboodle"
+          puts "caboodle kit:home <kit name> - sets the kit as the one that runs the home page"
+          puts "caboodle kit:remove <kit name> - removes the kit"
+          puts "caboodle kit:list - lists all of the available kits"
+          puts "caboodle config:list - shows the configuration variables"
+          puts "caboodle config:set <variable name> <value> - sets a value for the configuration variable"
+          puts "caboodle config:get <variable name> - shows the value of the configuration variable"
+          puts "caboodle deploy - pushes the caboodle to Heroku"
         end
       end
     end
