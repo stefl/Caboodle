@@ -2,6 +2,11 @@
 module Caboodle
   module Command
     class << self
+      def configure
+        config = File.expand_path(File.join(".","config","site.yml"))
+        Caboodle::Kit.configure_site config
+      end
+      
       def run(command, args, retries=0)
         case command
         when "create"
@@ -12,7 +17,7 @@ module Caboodle
           puts `cd #{site_name} && cp -i #{File.expand_path(File.join(File.dirname(__FILE__), 'app'))}/.gems .`
           puts `cd #{site_name} && git init`
           config = File.expand_path(File.join(".",site_name,"config","site.yml"))
-          Caboodle::Kit.configure config
+          Caboodle::Kit.configure_site config
           puts "Please set a few settings to get started"
           Caboodle::Kit.ask_user_for_all_missing_settings
           puts `cd #{site_name} && git add .`
@@ -43,6 +48,16 @@ module Caboodle
           puts `git commit -m"kit:remove #{args}" -a`
           puts `git push heroku master`
           puts "Done!"
+        when /config:list/
+          configure
+          Caboodle::Site.each{|k,v| puts "#{k}: #{v}"}
+        when /config:set/
+          configure
+          Caboodle::Site[args[0]] = args[1]
+          Caboodle::Kit.dump_config
+        when /config:get/
+          configure
+          puts Caboodle::Site[args[0]]
         when "deploy"
           gem 'heroku'
           require 'heroku'

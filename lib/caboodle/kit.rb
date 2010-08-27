@@ -22,7 +22,7 @@ module Caboodle
     class << self
       attr_accessor :credit_link
         
-      def configure config_path
+      def configure_site config_path
         set :config, config_path
         if File.exists?(config_path)
           Caboodle::Kit.load_config(config_path)
@@ -257,7 +257,6 @@ module Caboodle
             Caboodle::Layout[k.to_sym] = v
           end
         end
-        puts Caboodle::Layout.inspect
       end
       
       def defaults hash
@@ -289,7 +288,6 @@ module Caboodle
       
       def start
         errors = []
-        puts self.required_settings.inspect
         self.required_settings.each do |s|
           if Site[s].blank?
             errors << "    :#{s} has not been set"
