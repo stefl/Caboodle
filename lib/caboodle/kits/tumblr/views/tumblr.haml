@@ -1,0 +1,16 @@
+#tumblr.page
+  %section.tumblr_posts
+    - posts.each do |post|
+      %article{:id=>"tumblr_#{post.post_id}", :class=>"hentry tumblr_post #{post.format} #{post.type} #{post.slug} #{semantic_date( Date.parse(post.date))}"}
+        = haml :"_#{post.type}", :layout=>false, :locals=>{:post=>post}
+        %aside.entry-meta
+          %span.meta-prep.meta-prep-author By
+          %span.author.vcard
+            %a.url.fn.n{:href => "/about", :title => "About the author"}= Caboodle::Site.author
+          %span.meta-sep.meta-sep-entry-date |
+          %span.meta-prep.meta-prep-entry-date Published:
+          %span.entry-date
+            %abbr.published{:title => Date.parse(post.date).strftime("%d")}= Date.parse(post.date).strftime("%b")
+          %small
+            %span.tag-links
+              = post.type
