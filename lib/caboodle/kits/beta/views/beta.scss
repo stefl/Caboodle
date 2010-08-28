@@ -1,0 +1,8 @@
+#beta {
+  background-color: #eee;
+  color: #999;
+  p {
+    @include adjust-font-size-to(9px);
+    padding: 0.2em;
+  }
+}
