@@ -8,10 +8,7 @@ module Caboodle
       @latitude, @longitude, @uncertainty = 37.0625, -95.677068, 100
       @coords = "#{@latitude};#{@longitude} epu=#{@uncertainty}"
       headers "HTTP_GEO_POSITION" => @coords
-      puts @coords.inspect
-    end
-    
-    use Rack::Geo
+    end    
     
   end
 end

@@ -1,0 +1,11 @@
+#mapsearch {
+  @include columns(10,10);
+  height: 480px;
+  .gsmsc-mapDiv {
+    height: 320px;
+  }
+
+  .gsmsc-idleMapDiv {
+    height: 320px;
+  }
+}

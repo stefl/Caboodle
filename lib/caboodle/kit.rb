@@ -7,7 +7,7 @@ module Caboodle
     set :root, File.expand_path(File.join(File.dirname(__FILE__),"app"))
     set :public, Proc.new { File.join(root, "public") }
     set :haml, {:format => :html5 }
-
+    
     helpers Sinatra::CaboodleHelpers
 
     template :layout do
@@ -19,7 +19,10 @@ module Caboodle
       response.headers['Cache-Control'] = "public, max-age=#{Caboodle::Site.cache_for}"
     end
     
+    Config = Hashie::Mash.new
+    
     class << self
+      
       attr_accessor :credit_link
         
       def configure_site config_path
@@ -53,6 +56,14 @@ module Caboodle
           Caboodle::Site[k.to_s] = v } rescue puts "Warning! Skipping #{p}"
         Caboodle::Site.kits.uniq!
       end
+      
+      def load_custom_config p
+        loaded = YAML.load_file(p)
+        Hashie::Mash.new(loaded).each{ |k,v| 
+          v.strip! if v.class == String
+          Config[k.to_s] = v 
+        }
+      end
 
       def dump_config
         begin
@@ -63,6 +74,20 @@ module Caboodle
           File.open(p, 'w') {|f| f.write(YAML::dump(e))}
         rescue
           puts "Cannot write to config file: #{p}"
+        end
+      end
+      
+      def config_files array_of_files
+        configure do
+          array_of_files.each do |file|
+            config_path = File.expand_path(File.join(Caboodle::App.root,"config",file))
+            if File.exists?(config_path)
+              load_custom_config(config_path)
+            else
+              `cp "#{File.join(root,"config",file)}" "#{File.join(Caboodle::App.root,"config",".")}"` rescue "Could not create the config yml file"
+              puts "\nThis kit has a separate configuration file which you must edit:\n #{File.expand_path(File.join(Caboodle::App.root,"config",file))}\n"
+            end
+          end
         end
       end
 

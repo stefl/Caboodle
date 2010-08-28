@@ -12,7 +12,9 @@ require "sinatra/advanced_routes"
 
 module Caboodle
   class History < Caboodle::Kit
-        
+      
+    config_files ["history.yml"]
+    
     configure do
       config_path = File.expand_path(File.join(Caboodle::App.root,"config","history.yml"))
       if File.exists?(config_path)

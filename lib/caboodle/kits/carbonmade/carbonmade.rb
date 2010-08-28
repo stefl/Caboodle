@@ -9,5 +9,7 @@ module Caboodle
     required [:carbonmade_url]
     
     credit Caboodle::Site.carbonmade_url
+    
+    add_sass ["carbonmade"]
   end
 end
