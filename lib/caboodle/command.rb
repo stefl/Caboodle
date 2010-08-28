@@ -13,8 +13,10 @@ module Caboodle
           puts "Welcome to Caboodle!"
           site_name = args.first
           puts `mkdir -p #{site_name}`
-          puts `cd #{site_name} && cp -ri #{File.expand_path(File.join(File.dirname(__FILE__), 'app'))}/* .`
+          puts `cd #{site_name} && cp -i #{File.expand_path(File.join(File.dirname(__FILE__), 'app'))}/config.ru .`
+          puts `cd #{site_name} && cp -ri #{File.expand_path(File.join(File.dirname(__FILE__), 'app'))}/config .`
           puts `cd #{site_name} && cp -i #{File.expand_path(File.join(File.dirname(__FILE__), 'app'))}/.gems .`
+          puts `cd #{site_name} && cp -i #{File.expand_path(File.join(File.dirname(__FILE__), 'app'))}/public .`
           puts `cd #{site_name} && git init`
           config = File.expand_path(File.join(".",site_name,"config","site.yml"))
           Caboodle::Kit.configure_site config

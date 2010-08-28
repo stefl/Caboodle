@@ -1,4 +1,4 @@
-#tumblr.page
+#tumblr.page.thin_page
   %section.tumblr_posts
     - posts.each do |post|
       %article{:id=>"tumblr_#{post.post_id}", :class=>"hentry tumblr_post #{post.format} #{post.type} #{post.slug} #{semantic_date(post)}"}

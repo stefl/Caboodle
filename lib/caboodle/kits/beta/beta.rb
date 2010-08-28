@@ -5,4 +5,4 @@ module Caboodle
   end
 end
 
-Caboodle::Layout.before_header = "<div id='beta'><p>#{Caboodle::Site.beta_message}</p></div>"
+Caboodle::Layout.above_header = "<div id='beta'><p>#{Caboodle::Site.beta_message}</p></div>"

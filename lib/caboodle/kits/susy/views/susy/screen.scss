@@ -29,8 +29,8 @@ header#site-header {
   @include leader(6,32px);
   @include trailer(2,32px);
   #logo {
-    @include columns(1,12);
-    @include prefix(1);
+    @include columns(2,12);
+    
     img {
       width: 64px;
       height: auto;
@@ -126,13 +126,28 @@ section.subsection {
 
 .page {
   iframe {
-    width: 580px;
+    @include columns(12,12);
     height: 580px;
-    background-color: #eee;
-    padding: 32px;
-    overflow: hidden;
+    @include rhythm-borders(8px);
+    border-color: #eee;
+    padding: 0px;
     scroll: none;
   }
+}
+
+.page.thin_page {
+  iframe {
+    @include columns(10,10);
+    height: 580px;
+    @include rhythm-borders(8px);
+    border-color: #eee;
+    padding: 0px;
+    scroll: none;
+  }
+}
+
+.thin_page {
+  @include prefix(2);
 }
 
 #testing {

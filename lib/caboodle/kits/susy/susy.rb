@@ -16,7 +16,6 @@ module Caboodle
       content_type 'text/css', :charset => 'utf-8'
       sass_dir = File.expand_path(File.join(File.dirname(__FILE__),"views","susy"))
       load_paths = [Caboodle::App.root, File.join(Caboodle::App.root,"views"), File.join(Caboodle::App.root,"views","stylesheets"), sass_dir] + ::Compass.sass_engine_options[:load_paths]
-      Caboodle::Layout.after_footer ||= ""
       Caboodle::Kits.each do |name|
         kit_name = name.to_s.split("::").last || name
         kit_name = kit_name.downcase
@@ -28,7 +27,6 @@ module Caboodle
       the_sass = open(File.join(File.dirname(__FILE__),"views","susy","screen.scss")).read
       imported_files = []
       Caboodle::SASS.each do |s|
-        Caboodle::Layout.after_footer << "<p>#{s}</p>"
         the_sass << "\n"
         add_file = "@import \"#{s}\";"
         imported_files << add_file
