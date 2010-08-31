@@ -9,3 +9,11 @@
     height: 320px;
   }
 }
+
+.page.googlelocal {
+  nav {
+    ul {
+      @include inline-block-list(12px);
+    }
+  }
+}

@@ -22,6 +22,7 @@ begin
     gem.add_dependency "sleepy",">=0.1.4"
     gem.add_dependency "tumblr-rb"
     gem.add_dependency "rack-geo"
+    gem.add_dependency "maruku"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
