@@ -3,8 +3,7 @@ module Caboodle
         
     description "A single page which links to all of a Github account's public repos"
     
-    menu "Code", "/code" do
-      @title = "Code"
+    menu "Code" do
       @repos = GithubAPI.repositories
       
       @repos.sort!{|a, b| a.watchers <=> b.watchers}.reverse!
@@ -19,7 +18,7 @@ module Caboodle
     
     required [:github_username]
         
-    credit "http://github.com/#{Site.github_username}"
+    credit "http://github.com/#{Site.github_username}", "Fork #{Site.github_username} on Github"
   end
 
   class GithubAPI < Weary::Base

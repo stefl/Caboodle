@@ -17,16 +17,15 @@ module Caboodle
   class Linkedin < Caboodle::Kit
         
     description "Displays a Linkedin profile as a CV with consistent layout with the rest of the site."
-    
-    menu "CV", "/cv" do
-      @title = "Curriculum Vitae"
-      @linkedin = LinkedinAPI.new #rescue nil
+
+    menu "CV" do
+      @linkedin = LinkedinAPI.new
       haml :cv
     end
     
     required [:linkedin_full_name, :linkedin_profile_url]
     
-    credit Caboodle::Site.linkedin_profile_url
+    credit Caboodle::Site.linkedin_profile_url, "Linkedin profile"
     
     add_sass ["linkedin"]
     

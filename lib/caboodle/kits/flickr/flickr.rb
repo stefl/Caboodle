@@ -51,26 +51,17 @@ module Caboodle
     
     description "A browsable Flickr.com gallery with sets"
     
-    menu "Photography", "/photography" do
-      unless Site.flickr_user_id.blank?
-        @photosets = FlickrAPI.photosets rescue []
-        @title = "Photography"
-        haml :photography
-      else
-        "<h2>Please set your Flickr username</h2>"
-      end
+    menu "Photography" do
+      @photosets = FlickrAPI.photosets rescue []
+      haml :photography
     end
     
     get "/photography/:set_id" do |set_id|
-      unless Site.flickr_user_id.blank?
-        @photosets = FlickrAPI.photosets rescue []
-        @set_id = set_id
-        @photoset = Caboodle::FlickrAPI.photoset_info(@set_id) rescue nil
-        @title = "Photography: #{@photoset.title if @photoset.respond_to?(:title)}"
-        haml :photography
-      else
-        "<h2>Please set your Flickr username</h2>"
-      end
+      @photosets = FlickrAPI.photosets rescue []
+      @set_id = set_id
+      @photoset = Caboodle::FlickrAPI.photoset_info(@set_id) rescue nil
+      @title = "Photography: #{@photoset.title if @photoset.respond_to?(:title)}"
+      haml :photography
     end
     
     required [:flickr_username, :flickr_api_key]

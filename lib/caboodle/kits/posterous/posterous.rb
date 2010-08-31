@@ -162,10 +162,8 @@ module Caboodle
      
     rss ["feed://stef.posterous.com/rss.xml"]
     
-    credit "http://#{Caboodle::Site.posterous_sitename}.posterous.com"
+    credit "http://#{Caboodle::Site.posterous_sitename}.posterous.com", "#{Caboodle::Site.posterous_sitename} on Posterous"
     
     add_sass ["posterous"]
   end
 end
-
-#Caboodle::Posterous.new #gets the ID set up

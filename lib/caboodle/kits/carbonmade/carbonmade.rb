@@ -2,14 +2,11 @@ module Caboodle
   class Carbonmade < Caboodle::Kit
     description "Embeds a Carbonmade.com portfolio."
     
-    menu "Portfolio", "/portfolio" do
-      @title = "Portfolio"
-      haml :carbonmade
-    end
+    menu "Portfolio"
     
     required [:carbonmade_url]
     
-    credit Caboodle::Site.carbonmade_url
+    credit Caboodle::Site.carbonmade_url, "Carbonmade portfolio"
     
     add_sass ["carbonmade"]
   end
