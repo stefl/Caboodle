@@ -49,6 +49,8 @@ module Caboodle
 
   class Flickr < Caboodle::Kit
     
+    description "A browsable Flickr.com gallery with sets"
+    
     menu "Photography", "/photography" do
       unless Site.flickr_user_id.blank?
         @photosets = FlickrAPI.photosets rescue []

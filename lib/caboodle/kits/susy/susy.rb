@@ -11,7 +11,7 @@ require "sinatra/advanced_routes"
 
 module Caboodle
   class Susy < Caboodle::Kit
-            
+    describe "Adds Susy CSS formatting"     
     get("/susy/:name.css") do
       content_type 'text/css', :charset => 'utf-8'
       sass_dir = File.expand_path(File.join(File.dirname(__FILE__),"views","susy"))

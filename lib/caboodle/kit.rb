@@ -36,6 +36,7 @@ module Caboodle
       end
       
       def inherited subclass
+        set :kit_root, File.expand_path(File.dirname(caller[0].split(/:in/).last))
         c = caller[0].split(":")
         f = File.dirname(File.expand_path("#{c[0]}"))
         views = File.join(f, "views")
@@ -84,11 +85,29 @@ module Caboodle
             if File.exists?(config_path)
               load_custom_config(config_path)
             else
-              `cp "#{File.join(root,"config",file)}" "#{File.join(Caboodle::App.root,"config",".")}"` rescue "Could not create the config yml file"
+              `cp "#{File.join(kit_root,"config",file)}" "#{File.join(Caboodle::App.root,"config",".")}"` rescue "Could not create the config yml file"
               puts "\nThis kit has a separate configuration file which you must edit:\n #{File.expand_path(File.join(Caboodle::App.root,"config",file))}\n"
             end
           end
         end
+      end
+      
+      def files array_of_files
+        configure do
+          array_of_files.each do |file|
+            target_path = File.expand_path(File.join(Caboodle::App.root,"config",file))
+            unless File.exists?(target_path)
+              puts File.join(kit_root,"config",file)
+              
+              `cp "#{File.join(kit_root,"config",file)}" "#{File.join(Caboodle::App.root,"config",".")}"` rescue "Could not create the config yml file"
+            end
+          end
+        end
+      end
+      
+      def description string
+        puts "\n"
+        puts "#{name.to_s.split("::").last}: #{string}"
       end
 
       def setup
@@ -169,7 +188,7 @@ module Caboodle
           end
         end
         optional_settings.each do |r|
-          if Caboodle::Site[r].blank?
+          unless defined?(Caboodle::Site[r])
             ask_user r, true
           end
         end
@@ -293,7 +312,7 @@ module Caboodle
       def credit url
         #todo there must be an easier way
         class_eval "def credit_link
-        \"<a rel='me' href='#{url}' rel='me'>#{self.name.split("::").last}</a>\"
+        \"<a rel='me' href='#{url}'>#{self.name.split("::").last}</a>\"
         end"
       end
     
@@ -312,6 +331,7 @@ module Caboodle
       end
       
       def start
+        
         errors = []
         self.required_settings.each do |s|
           if Site[s].blank?

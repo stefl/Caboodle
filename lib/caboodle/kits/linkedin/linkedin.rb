@@ -16,6 +16,8 @@ module Caboodle
 
   class Linkedin < Caboodle::Kit
         
+    description "Displays a Linkedin profile as a CV with consistent layout with the rest of the site."
+    
     menu "CV", "/cv" do
       @title = "Curriculum Vitae"
       @linkedin = LinkedinAPI.new #rescue nil

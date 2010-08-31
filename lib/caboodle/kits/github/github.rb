@@ -1,6 +1,8 @@
 module Caboodle
   class Github < Caboodle::Kit
         
+    description "A single page which links to all of a Github account's public repos"
+    
     menu "Code", "/code" do
       @title = "Code"
       @repos = GithubAPI.repositories
@@ -16,10 +18,8 @@ module Caboodle
     end
     
     required [:github_username]
-    
-    defaults []
-    
-    credit "http://gitbhu.com/#{Site.github_username}"
+        
+    credit "http://github.com/#{Site.github_username}"
   end
 
   class GithubAPI < Weary::Base

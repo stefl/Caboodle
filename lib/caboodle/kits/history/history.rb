@@ -13,6 +13,7 @@ require "sinatra/advanced_routes"
 module Caboodle
   class History < Caboodle::Kit
       
+    description "By editing a YAML file you can list things that you have done in the past."
     config_files ["history.yml"]
     
     configure do

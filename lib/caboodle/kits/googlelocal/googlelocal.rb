@@ -1,5 +1,8 @@
 module Caboodle
   class Googlelocal < Caboodle::Kit
+    
+    description "A google map linking to a list of locations and enabling Local Search around each of them."
+    
     required [:google_maps_api_key]
     
     config_files ["googlelocal.yml"]
