@@ -135,14 +135,14 @@ module Caboodle
     description "Displays a Posterous blog with permalinks, pagination and commends if the Disqus kit is included"
     
     get "/posterous/:page_number" do |page_number|
-      @posts = PosterousPost.page(page_number) rescue nil
+      @posts = PosterousPost.page(page_number)
       not_found if @posts.class == Array && @posts.blank?
       haml :posts
     end
 
     get "/:year/:month/:slug" do |year, month, slug|
       STDERR.puts "Get a post"
-    	post = PosterousPost.from_slug(slug) rescue nil
+    	post = PosterousPost.from_slug(slug)
     	STDERR.puts "Slug not found: #{slug}"
     	not_found unless post
     	@title = post.title
@@ -150,7 +150,7 @@ module Caboodle
     end
     
     menu "Blog", "/posterous" do
-      @posts = PosterousPost.all(:page=>(params[:page] || 1)) rescue []
+      @posts = PosterousPost.all(:page=>(params[:page] || 1))
       haml :posts.to_sym
     end
     
