@@ -46,6 +46,7 @@ header#site-header {
   }
   #site-description {
     @include columns(5,12);
+    @include prefix(2);
     h2 {
       @include adjust-font-size-to(24px);
       color: #ddd;
@@ -58,7 +59,6 @@ header#site-header {
     ul {
       @include inline-block-list(12px);
       li {
-        @include slab-family;
       }
     }
   }
@@ -107,7 +107,6 @@ section#main {
 footer {
   @include prefix(2);
   @include full;
-  @include slab-family;
 }
 
 section.subsection {

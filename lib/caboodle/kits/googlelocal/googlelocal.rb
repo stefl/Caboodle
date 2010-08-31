@@ -11,13 +11,10 @@ module Caboodle
     
     before do
       @locations = Config.google_local_locations
+      @location = Config.google_local_locations.first
     end
     
-    menu "Near me", "/near_me" do
-      @title = "Near me"
-      @location = Config.google_local_locations.first
-      haml :googlelocal
-    end
+    menu "Near me"
     
     get "/near_me/:slug" do
       Config.google_local_locations.each do |loc|
@@ -25,9 +22,7 @@ module Caboodle
           @location = loc
         end
       end
-      
-      puts @location.inspect
-      
+            
       if @location
         haml :googlelocal
       else

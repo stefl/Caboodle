@@ -3,10 +3,7 @@ module Caboodle
         
     description "Embeds a Onepage.com contact card and loads it at /contact"
     
-    menu "Contact", "/contact" do
-      @title = "Contact"
-      haml :contact
-    end
+    menu "Contact"
     
     required [:onepage_username]
     

@@ -224,15 +224,32 @@ module Caboodle
         Caboodle::Kits.each { |p| p.start }
       end
     
-      def menu display, path, &block
+      def menu display, path=nil, &block
+        #todo proper slugify
+        slug = display.downcase.gsub(" ","-").gsub("'","")
+        path = "/#{slug}" unless path
         path = "/" if Site.home_kit == self.to_s.gsub("Caboodle::","")
         Caboodle::MenuItems << {:display=>display, :link=>path, :kit=>self}
-        self.get path, &block
+        self.before {@title = display}
+        if block
+          self.get path, &block
+        else
+          puts "get '#{path}'"
+          class_eval "get '#{path}' do
+          haml :#{slug.gsub("-","_")}
+          end"
+        end
         @@has_menu = true
       end
       
       def has_menu?
         defined?(@@has_menu)
+      end
+      
+      def markdown sym
+        md = File.expand_path(File.join(Caboodle::App.root,"config","#{sym.to_s}.md"))
+        @content = Maruku.new(open(md).read).to_html_document
+        haml ".page.about.thin_page= @content"
       end
       
       def required keys
@@ -274,6 +291,15 @@ module Caboodle
         Caboodle::SASS.uniq!
       end
       
+      def add_layout k, v
+        unless Caboodle::Layout[k.to_sym].blank?
+          Caboodle::Layout[k.to_sym] << "\n"
+          Caboodle::Layout[k.to_sym] << v
+        else
+          Caboodle::Layout[k.to_sym] = v
+        end
+      end
+      
       alias_method :stylesheet, :stylesheets
       
       def javascripts array_of_js_files
@@ -298,12 +324,7 @@ module Caboodle
       
       def add_to_layout hash_of_items
         hash_of_items.each do |k,v|
-          unless Caboodle::Layout[k.to_sym].blank?
-            Caboodle::Layout[k.to_sym] << "\n"
-            Caboodle::Layout[k.to_sym] << v
-          else
-            Caboodle::Layout[k.to_sym] = v
-          end
+          add_layout k, v
         end
       end
       
@@ -313,10 +334,10 @@ module Caboodle
         end
       end
       
-      def credit url
+      def credit url, title=nil
         #todo there must be an easier way
         class_eval "def credit_link
-        \"<a rel='me' href='#{url}'>#{self.name.split("::").last}</a>\"
+        \"<a rel='me' href='#{url}'>#{title || self.name.split("::").last}</a>\"
         end"
       end
     

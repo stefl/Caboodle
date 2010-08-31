@@ -1,0 +1,17 @@
+// #todo set the family programatically
+@mixin typekit-family {
+  font-family: "museo-slab-1", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-weight: lighter;
+}
+
+footer {
+  @include typekit-family;
+}
+
+nav {
+  ul {
+    li {
+      @include typekit-family;
+    }
+  }
+}
