@@ -5,13 +5,13 @@
 }
 
 footer {
-  @include typekit-family;
+  @include main-family;
 }
 
 nav {
   ul {
     li {
-      @include typekit-family;
+      @include main-family;
     }
   }
 }
