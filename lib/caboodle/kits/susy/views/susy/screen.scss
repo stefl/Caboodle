@@ -30,7 +30,7 @@ header#site-header {
   @include trailer(2,32px);
   #logo {
     @include columns(2,12);
-    
+    height: 64px;
     img {
       width: 64px;
       height: auto;
@@ -46,7 +46,6 @@ header#site-header {
   }
   #site-description {
     @include columns(5,12);
-    @include prefix(2);
     h2 {
       @include adjust-font-size-to(24px);
       color: #ddd;

@@ -27,6 +27,13 @@ module Caboodle
     
     Config = Hashie::Mash.new
     
+    def markdown sym
+      puts sym
+      md = File.expand_path(File.join(Caboodle::App.root,"config","#{sym.to_s}.md"))
+      @content = Maruku.new(open(md).read).to_html_document
+      haml ".page.about.thin_page= @content"
+    end
+    
     class << self
       
       attr_accessor :credit_link
@@ -234,8 +241,7 @@ module Caboodle
         if block
           self.get path, &block
         else
-          puts "get '#{path}'"
-          class_eval "get '#{path}' do
+          eval "self.get '#{path}' do
           haml :#{slug.gsub("-","_")}
           end"
         end
@@ -244,12 +250,6 @@ module Caboodle
       
       def has_menu?
         defined?(@@has_menu)
-      end
-      
-      def markdown sym
-        md = File.expand_path(File.join(Caboodle::App.root,"config","#{sym.to_s}.md"))
-        @content = Maruku.new(open(md).read).to_html_document
-        haml ".page.about.thin_page= @content"
       end
       
       def required keys

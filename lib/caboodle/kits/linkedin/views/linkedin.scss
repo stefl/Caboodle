@@ -25,7 +25,7 @@
   
   h3, dt {
     @include adjust-font-size-to(24px);
-    @include slab-family;
+    @include main-family;
   }
   
   ul.vcalendar {
