@@ -5,7 +5,7 @@
     border: 0px !important;
     dt {
       @include adjust-font-size-to(24px);
-      @include slab-family;
+      @include main-family;
       @include columns(1,6);
       border: 0px !important;
     }

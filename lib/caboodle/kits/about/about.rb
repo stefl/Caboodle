@@ -4,7 +4,7 @@ class Caboodle::About < Caboodle::Kit
   
   files ["about.md"]
       
-  menu "About" do
+  menu "About", "/about" do
     markdown :about
   end
 end
