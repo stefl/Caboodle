@@ -1,6 +1,7 @@
 module Caboodle
   class Soundcloud < Caboodle::Kit
     description "Displays a search of soundcloud as embedded players on a single page."
+    
     menu "Mixes", "/mixes" do
       @title = "Mixes"
       @mixes = SoundcloudAPI.sets

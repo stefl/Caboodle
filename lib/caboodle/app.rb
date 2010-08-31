@@ -1,6 +1,5 @@
 module Caboodle
   class App < Sinatra::Base 
-
     set :app_file, __FILE__
     set :logging, true
     set :root, File.expand_path(".")

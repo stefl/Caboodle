@@ -10,7 +10,6 @@ module Caboodle
     config_files ["about.yml"]
     
     menu "About", "/about" do
-      puts Caboodle::App.root
       md = File.expand_path(File.join(Caboodle::App.root,"config","about.md"))
       @content = Maruku.new(open(md).read).to_html_document
       haml ".page.about= @content"

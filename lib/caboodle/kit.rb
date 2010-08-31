@@ -32,7 +32,7 @@ module Caboodle
       attr_accessor :credit_link
         
       def configure_site config_path
-        set :config, config_path
+        set :config_path, config_path
         if File.exists?(config_path)
           Caboodle::Kit.load_config(config_path)
           Caboodle::Kit.setup
@@ -102,9 +102,7 @@ module Caboodle
         configure do
           array_of_files.each do |file|
             target_path = File.expand_path(File.join(Caboodle::App.root,"config",file))
-            unless File.exists?(target_path)
-              puts File.join(kit_root,"config",file)
-              
+            unless File.exists?(target_path)              
               `cp "#{File.join(kit_root,"config",file)}" "#{File.join(Caboodle::App.root,"config",".")}"` rescue "Could not create the config yml file"
             end
           end
