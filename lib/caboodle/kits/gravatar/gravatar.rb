@@ -2,6 +2,9 @@ require 'digest/md5'
 
 module Caboodle
   class Standard < Caboodle::Kit
+    
+    description "Sets the logo of the site to your gravatar.com image"
+    
     optional [:email]
     
     configure do

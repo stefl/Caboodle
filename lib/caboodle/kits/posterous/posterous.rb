@@ -132,6 +132,8 @@ module Caboodle
   
   class Posterous < Caboodle::Kit
   
+    description "Displays a Posterous blog with permalinks, pagination and commends if the Disqus kit is included"
+    
     get "/posterous/:page_number" do |page_number|
       @posts = PosterousPost.page(page_number) rescue nil
       not_found if @posts.class == Array && @posts.blank?

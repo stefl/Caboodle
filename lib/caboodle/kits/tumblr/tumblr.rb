@@ -3,7 +3,8 @@ require 'tumblr'
 
 module Caboodle
   class Tumblr < Caboodle::Kit   
-     
+    description "Includes a tumblr.com account"
+    
     helpers do
       def semantic_date post
         date = Date.parse(post.date)

@@ -1,5 +1,6 @@
 module Caboodle
   class Standard < Caboodle::Kit
+    description "The default home page and site options"
     required [:title, :description, :author]
     optional [:logo_url]
     if Caboodle::Site.home_kit.blank?
