@@ -51,9 +51,7 @@ header#site-header {
       color: #ddd;
     }
   }
-  #access {
-    @include skip-link();
-  }
+
   nav {
     @include trailer(1,32px);
     @include prefix(2);
@@ -64,6 +62,10 @@ header#site-header {
       }
     }
   }
+}
+
+#access {
+  @include skip-link();
 }
 
 section#main {

@@ -1,33 +1,40 @@
-#mapsearch
-  %span
-    Loading...
+.googlelocal.page
+  %nav.locations
+    %ul
+      - @locations.each do |loc|
+        %li
+          %a{:href=>"/near_me/#{loc.title.downcase.gsub(" ","-")}"}
+            = loc.title
+  #mapsearch
+    %span
+      Loading...
 
-%script{:src=>"http://maps.google.com/maps?file=api&v=2&key=#{Caboodle::Site.google_maps_api_key}", :type=>"text/javascript"}
-%script{:src=>"http://www.google.com/uds/api?file=uds.js&v=1.0&source=uds-msw&key=#{Caboodle::Site.google_maps_api_key}", :type=>"text/javascript"}
-:javascript
-  window._uds_msw_donotrepair = true;
-%script{:src=>"http://www.google.com/uds/solutions/mapsearch/gsmapsearch.js?mode=new", :type=>"text/javascript"}
-:javascript
-  var localSearch;
-  function LoadMapSearchControl() {
-    var options = {
-      zoomControl : GSmapSearchControl.ZOOM_CONTROL_ENABLE_ALL,
-      title : '#{Caboodle::Site.title}',
-      url : '#{request.host}',
-            idleMapZoom : GSmapSearchControl.ACTIVE_MAP_ZOOM+1,
-            activeMapZoom : GSmapSearchControl.ACTIVE_MAP_ZOOM+1
-    }
+  %script{:src=>"http://maps.google.com/maps?file=api&v=2&key=#{Caboodle::Site.google_maps_api_key}", :type=>"text/javascript"}
+  %script{:src=>"http://www.google.com/uds/api?file=uds.js&v=1.0&source=uds-msw&key=#{Caboodle::Site.google_maps_api_key}", :type=>"text/javascript"}
+  :javascript
+    window._uds_msw_donotrepair = true;
+  %script{:src=>"http://www.google.com/uds/solutions/mapsearch/gsmapsearch.js?mode=new", :type=>"text/javascript"}
+  :javascript
+    var localSearch;
+    function LoadMapSearchControl() {
+      var options = {
+        zoomControl : GSmapSearchControl.ZOOM_CONTROL_ENABLE_ALL,
+        title : '#{Caboodle::Site.title}',
+        url : '#{request.host}',
+              idleMapZoom : GSmapSearchControl.ACTIVE_MAP_ZOOM+1,
+              activeMapZoom : GSmapSearchControl.ACTIVE_MAP_ZOOM+1
+      }
          
-    var center = new Object(); 
-    center.lat = #{@locations.first.latitude}; 
-    center.lng = #{@locations.first.longitude};
-    localSearch = new GSmapSearchControl(
-      document.getElementById("mapsearch"),
-      center,
-      options
-    );
-  }
-  $(document).ready(function(){LoadMapSearchControl()});
+      var center = new Object(); 
+      center.lat = #{@location.latitude}; 
+      center.lng = #{@location.longitude};
+      localSearch = new GSmapSearchControl(
+        document.getElementById("mapsearch"),
+        center,
+        options
+      );
+    }
+    $(document).ready(function(){LoadMapSearchControl()});
 
-%h2
-  Search for something in the local area
+  %h2
+    Search for something in the local area

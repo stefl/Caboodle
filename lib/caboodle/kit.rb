@@ -19,6 +19,12 @@ module Caboodle
       response.headers['Cache-Control'] = "public, max-age=#{Caboodle::Site.cache_for}"
     end
     
+    error SocketError do
+      @title = "Whoops!"
+      @message = "Sorry. There was a problem communicating with #{self.class.kit_name}."
+      haml File.open(File.join(Caboodle::Kit.root, "views","error.haml")).read
+    end
+    
     Config = Hashie::Mash.new
     
     class << self
@@ -317,15 +323,19 @@ module Caboodle
       end
     
       def required_settings
-        RequiredSettings[self.ancestors.first.to_s.split("::").last] ||= [] 
-        RequiredSettings[self.ancestors.first.to_s.split("::").last]
+        RequiredSettings[kit_name] ||= [] 
+        RequiredSettings[kit_name]
       end
       
       def optional_settings
-        OptionalSettings[self.ancestors.first.to_s.split("::").last] ||= [] 
-        OptionalSettings[self.ancestors.first.to_s.split("::").last]
+        OptionalSettings[kit_name] ||= [] 
+        OptionalSettings[kit_name]
       end
     
+      def kit_name
+        self.ancestors.first.to_s.split("::").last
+      end
+      
       def available_kits
         Dir.new(File.join(File.dirname(__FILE__),"kits")).entries.delete_if{|a| a[0,1]=="."}
       end
@@ -343,9 +353,9 @@ module Caboodle
           Caboodle::App.use self 
         else
           STDERR.puts " "
-          STDERR.puts "Warning - #{self.ancestors.first} is disabled because:"
+          STDERR.puts "Warning - #{kit_name} is disabled because:"
           STDERR.puts errors.join("\n") 
-          Caboodle::Errors << Hashie::Mash.new(:title=>"#{self.ancestors.first} is disable", :reason=>errors.join(";"))
+          Caboodle::Errors << Hashie::Mash.new(:title=>"#{kit_name} is disable", :reason=>errors.join(";"))
         end
       end
     end

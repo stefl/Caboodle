@@ -1,15 +1,18 @@
 :google_local_locations:
-  Home:
+  -
+    title: Home
     description: My home is in North London
     address: Southgate, London, UK
-    latitude: 51.511867
-    longitude: -0.127587
-  Work:
-    description: I work at All In near Leicester Square
-    address: 4-5 Great Newport Street, London, WC1 2EH
     latitude: 51.632483
     longitude: -0.127931
-  Old Stomping Ground:
+  -
+    title: Work
+    description: I work at All In near Leicester Square
+    address: 4-5 Great Newport Street, London, WC1 2EH
+    latitude: 51.511867
+    longitude: -0.127587
+  -
+    title: Birmingham
     description: I used to spend a lot of time in Birmingham
     address: 4-5 Great Newport Street, London, WC1 2EH
     latitude: 52.446594
