@@ -198,11 +198,13 @@ module Caboodle
           if Caboodle::Site[r].blank?
             ask_user r
           end
+          self.set r.to_s.to_sym, Caboodle::Site[r].to_s
         end
         optional_settings.each do |r|
           unless defined?(Caboodle::Site[r])
             ask_user r, true
           end
+          self.set r.to_s.to_sym, Caboodle::Site[r].to_s
         end
       end
       
@@ -257,6 +259,8 @@ module Caboodle
         if keys.class == Array
           keys.each do |k| 
             self.required_settings << k
+            puts "self.set #{k}, #{Caboodle::Site[k]}"
+            self.set k.to_s.to_sym, Caboodle::Site[k].to_s
           end
         else
           self.required_settings << keys
@@ -377,6 +381,10 @@ module Caboodle
           STDERR.puts errors.join("\n") 
           Caboodle::Errors << Hashie::Mash.new(:title=>"#{kit_name} is disable", :reason=>errors.join(";"))
         end
+      end
+      
+      def method_missing meth
+        Caboodle::Site[meth]
       end
     end
   end

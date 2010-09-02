@@ -19,14 +19,14 @@ class Caboodle::Tumblr < Caboodle::Kit
   required [:tumblr_email, :tumblr_password, :tumblr_sitename]
   
   menu "Tumblr" do
-    tumblr = ::Tumblr::Reader.new(Caboodle::Site.tumblr_email,Caboodle::Site.tumblr_password)
-    req = tumblr.read(Caboodle::Site.tumblr_sitename, {:num=>10}).perform_sleepily
+    tumblr = ::Tumblr::Reader.new(tumblr_email,tumblr_password)
+    req = tumblr.read(tumblr_sitename, {:num=>10}).perform_sleepily
     posts = ::Tumblr::Reader.get_posts(req)
     haml :tumblr, :locals => { :posts => posts }
   end
   
   get "/tumblr/page/:page" do
-    tumblr = ::Tumblr::Reader.new(Caboodle::Site.tumblr_email,Caboodle::Site.tumblr_password)
+    tumblr = ::Tumblr::Reader.new(tumblr_email,tumblr_password)
     posts = tumblr.get_posts()
     haml :tumblr, :locals => { :posts => posts }
   end

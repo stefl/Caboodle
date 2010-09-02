@@ -7,7 +7,7 @@ class Caboodle::Analytics < Caboodle::Kit
   if ENV["RACK_ENV"] == "production"
     add_layout :after_body, "<script type=\"text/javascript\">
       var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', '#{Caboodle::Site.analytics_id}']);
+      _gaq.push(['_setAccount', '#{analytics_id}']);
       _gaq.push(['_setDomainName', 'none']);
       _gaq.push(['_setAllowLinker', true]);
       _gaq.push(['_trackPageview']);

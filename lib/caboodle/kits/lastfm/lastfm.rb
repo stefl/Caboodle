@@ -5,7 +5,7 @@ class Caboodle::Lastfm < Caboodle::Kit
   required [:lastfm_username]
   
   def scrape 
-    @last ||= Caboodle.scrape("http://www.last.fm/user/#{Caboodle::Site.lastfm_username}")
+    @last ||= Caboodle.scrape("http://www.last.fm/user/#{lastfm_username}")
   end
   
   menu "Listening" do
@@ -18,6 +18,6 @@ class Caboodle::Lastfm < Caboodle::Kit
     haml :listening
   end
   
-  credit "http://www.last.fm/listen/user/#{Caboodle::Site.lastfm_username}", "#{Caboodle::Site.lastfm_username} on Last.fm"
+  credit "http://www.last.fm/listen/user/#{lastfm_username}", "#{lastfm_username} on Last.fm"
   
 end
