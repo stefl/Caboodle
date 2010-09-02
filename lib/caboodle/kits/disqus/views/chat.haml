@@ -3,7 +3,7 @@
     var disqus_developer = true;
     
 #disqus.page
-  - if Caboodle::Site.disqus
+  - if disqus
     #disqus_thread
     %script{:src => "http://disqus.com/forums/#{disqus}/embed.js", :type => "text/javascript"}
     %noscript

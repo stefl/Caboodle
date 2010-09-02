@@ -7,20 +7,20 @@ module Caboodle
   class PosterousAPI < Weary::Base
   
     def initialize(opts={})
-      Caboodle::Site.posterous_password ||= ENV["posterous_password"]
-      self.credentials(opts[:username] || Caboodle::Site.posterous_username, opts[:password] || Caboodle::Site.posterous_password)
-      sitename = opts[:sitename] || Caboodle::Site.posterous_sitename
-      unless defined?(Caboodle::Site.posterous_site_id)
+      Site.posterous_password ||= ENV["posterous_password"]
+      self.credentials(opts[:username] || Site.posterous_username, opts[:password] || Site.posterous_password)
+      sitename = opts[:sitename] || Site.posterous_sitename
+      unless defined?(Site.posterous_site_id)
         sites = Hashie::Mash.new(getsites.perform_sleepily.parse).rsp.site
       
         sites.each do |site|
-          if site.url.include?("http://#{Caboodle::Site.posterous_sitename}.posterous.com")
-            Caboodle::Site.posterous_site_id = site.id
+          if site.url.include?("http://#{Site.posterous_sitename}.posterous.com")
+            Site.posterous_site_id = site.id
           end
         end
       end
       
-      self.defaults = {:site_id => Caboodle::Site.posterous_site_id}
+      self.defaults = {:site_id => Site.posterous_site_id}
     end
   
     declare "getsites" do |r|
@@ -50,14 +50,12 @@ module Caboodle
     end
   
     def self.from_slug(slug)
-      doc = Caboodle.scrape("http://#{Caboodle::Site.posterous_sitename}.posterous.com/#{slug}")
+      doc = Caboodle.scrape("http://#{Site.posterous_sitename}.posterous.com/#{slug}")
       opts = {}
       opts["body"] = doc.css('div.bodytext').inner_html
       opts["title"] = doc.css('title').inner_html.split(" - ").first
-      opts["link"] = "http://#{Caboodle::Site.posterous_sitename}.posterous.com/#{slug}"
+      opts["link"] = "http://#{Site.posterous_sitename}.posterous.com/#{slug}"
       perma = doc.css('.permalink').inner_html
-      STDERR.puts "Opts: #{opts.inspect}"
-      STDERR.puts "Perma: #{perma}"
       opts["date"] = Date.parse(perma)
       PosterousPost.new(opts)
     end
@@ -69,9 +67,8 @@ module Caboodle
   
     def self.all(opts={})
       r = []
-      STDERR.puts "All posts for: #{opts.inspect}"
       p = PosterousAPI.new
-      opts[:site_id] = Caboodle::Site.posterous_site_id 
+      opts[:site_id] = Site.posterous_site_id 
       rsp = p.all(opts).perform_sleepily.parse["rsp"]
       rsp["post"].each{|a| r << PosterousPost.new(a)} if rsp["post"]
       r
@@ -122,7 +119,7 @@ module Caboodle
     end
 
   	def full_url
-  		Caboodle::Site.url_base.gsub(/\/$/, '') + url
+  		Site.url_base.gsub(/\/$/, '') + url
   	end
   
     def slug
@@ -158,11 +155,11 @@ module Caboodle
     
     optional [:disqus]
     
-    stylesheets ["http://disqus.com/stylesheets/#{Caboodle::Site.disqus}/disqus.css?v=2.0"]
+    stylesheets ["http://disqus.com/stylesheets/#{disqus}/disqus.css?v=2.0"]
      
     rss ["feed://stef.posterous.com/rss.xml"]
     
-    credit "http://#{Caboodle::Site.posterous_sitename}.posterous.com", "#{Caboodle::Site.posterous_sitename} on Posterous"
+    credit "http://#{posterous_sitename}.posterous.com", "#{posterous_sitename} on Posterous"
     
     add_sass ["posterous"]
   end

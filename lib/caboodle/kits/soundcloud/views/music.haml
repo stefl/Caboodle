@@ -6,12 +6,12 @@
           = mix.title
       %dd
         - url = "http%3A%2F%2Fsoundcloud.com%2F#{mix.user.permalink}%2Fsets%2F#{mix.permalink}"
-        - if Caboodle::Site.soundcloud_widget == "comments"
+        - if soundcloud_widget == "comments"
           :plain
             <object height="136" width="100%"> <param name="movie" value="http://player.soundcloud.com/player.swf?url=#{url}"></param> <param name="allowscriptaccess" value="always"></param> <embed allowscriptaccess="always" height="136" src="http://player.soundcloud.com/player.swf?url=#{url}" type="application/x-shockwave-flash" width="100%"></embed> </object>
-        - elsif Caboodle::Site.soundcloud_widget == "tiny"
+        - elsif soundcloud_widget == "tiny"
           :plain
             <object height="18" width="100%"> <param name="movie" value="http://player.soundcloud.com/player.swf?url=#{url}&amp;auto_play=false&amp;player_type=tiny&amp;font=Arial&amp;color=0066cc"> <param name="allowscriptaccess" value="always"> <embed allowscriptaccess="always" height="18" src="http://player.soundcloud.com/player.swf?url=#{url}&amp;auto_play=false&amp;player_type=tiny&amp;font=Arial&amp;color=0066cc" type="application/x-shockwave-flash" width="100%"> </object>
-        - else Caboodle::Site.soundcloud_widget == "artwork"
+        - else soundcloud_widget == "artwork"
           :plain
             <object height="200" width="200"> <param name="movie" value="http://player.soundcloud.com/player.swf?url=#{url}&amp;auto_play=false&amp;player_type=artwork&amp;color=0066cc"> <param name="allowscriptaccess" value="always"> <embed allowscriptaccess="always" height="200" src="http://player.soundcloud.com/player.swf?url=#{url}&amp;auto_play=false&amp;player_type=artwork&amp;color=0066cc" type="application/x-shockwave-flash" width="200"> </object>
