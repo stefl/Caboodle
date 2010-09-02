@@ -64,7 +64,7 @@ header#site-header {
 }
 
 #access {
-  @include skip-link();
+  display: none;
 }
 
 section#main {

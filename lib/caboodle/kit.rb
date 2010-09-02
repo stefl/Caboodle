@@ -64,6 +64,7 @@ module Caboodle
       end
       
       def load_config p
+        set :config, p
         loaded = YAML.load_file(p)
         Hashie::Mash.new(loaded).each{ |k,v| 
           v.strip! if v.class == String
@@ -132,7 +133,7 @@ module Caboodle
           kit_name = kit_name.downcase
           orig = Caboodle.constants
           begin
-            require "caboodle/kits/#{kit_name}/#{kit_name}" #rescue puts "Problem loading Kit: #{kit_name}"
+            require "caboodle/kits/#{kit_name}/#{kit_name}"
             added = Caboodle.constants - orig
             added.each do |d| 
               c = Caboodle.const_get(d)
@@ -157,7 +158,7 @@ module Caboodle
           kit_name = kit_name.downcase
           puts "Unloading Kit: #{kit_name}"
           orig = Caboodle.constants
-          require "caboodle/kits/#{kit_name}/#{kit_name}" #rescue puts "Problem loading Kit: #{kit_name}"
+          require "caboodle/kits/#{kit_name}/#{kit_name}"
           added = Caboodle.constants - orig
           added.each do |d| 
             c = Caboodle.const_get(d)
