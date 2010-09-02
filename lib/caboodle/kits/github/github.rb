@@ -18,21 +18,21 @@ module Caboodle
     
     required [:github_username]
         
-    credit "http://github.com/#{Site.github_username}", "Fork #{Site.github_username} on Github"
+    credit "http://github.com/#{github_username}", "Fork #{github_username} on Github"
   end
 
   class GithubAPI < Weary::Base
     
-      declare "repositories" do |r|
-        r.url = "http://github.com/api/v2/json/repos/show/#{Caboodle::Site.github_username}"
-        r.via = :get
-      end
-      
-      def self.repositories
-        a = Hashie::Mash.new(GithubAPI.new.repositories.perform_sleepily.parse).repositories
-        puts a.inspect
-        a
-      end
+    declare "repositories" do |r|
+      r.url = "http://github.com/api/v2/json/repos/show/#{Caboodle::Site.github_username}"
+      r.via = :get
+    end
+    
+    def self.repositories
+      a = Hashie::Mash.new(GithubAPI.new.repositories.perform_sleepily.parse).repositories
+      puts a.inspect
+      a
+    end
 
   end
 end

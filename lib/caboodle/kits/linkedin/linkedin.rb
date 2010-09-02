@@ -5,9 +5,9 @@ module Caboodle
     attr_accessor :full
     
     def initialize
-      @full = Caboodle.scrape(Caboodle::Site.linkedin_profile_url)
+      @full = Caboodle.scrape(Site.linkedin_profile_url)
       @full.css('.showhide-link').each{|a| @full.delete(a)}
-      @full = @full.css("#main").to_html.gsub("#{Caboodle::Site.linkedin_full_name}’s ","")
+      @full = @full.css("#main").to_html.gsub("#{Site.linkedin_full_name}’s ","")
     end
     def method_missing(method_name)
       @data.send(method_name.to_sym)
@@ -25,7 +25,7 @@ module Caboodle
     
     required [:linkedin_full_name, :linkedin_profile_url]
     
-    credit Caboodle::Site.linkedin_profile_url, "Linkedin profile"
+    credit linkedin_profile_url, "Linkedin profile"
     
     add_sass ["linkedin"]
     

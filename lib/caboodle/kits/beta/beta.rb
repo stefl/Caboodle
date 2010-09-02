@@ -6,5 +6,5 @@ class Caboodle::Beta < Caboodle::Kit
   
   add_sass ["beta"]
   
-  add_layout :above_header, "<div id='beta'><p>#{Caboodle::Site.beta_message}</p></div>"
+  add_layout :above_header, "<div id='beta'><p>#{beta_message}</p></div>"
 end

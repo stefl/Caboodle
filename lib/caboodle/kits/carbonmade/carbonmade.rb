@@ -6,7 +6,7 @@ module Caboodle
     
     required [:carbonmade_url]
     
-    credit Caboodle::Site.carbonmade_url, "Carbonmade portfolio"
+    credit carbonmade_url, "Carbonmade portfolio"
     
     add_sass ["carbonmade"]
   end

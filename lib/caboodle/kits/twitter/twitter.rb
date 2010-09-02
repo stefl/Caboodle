@@ -5,7 +5,7 @@ class Caboodle::Twitter < Caboodle::Kit
   
   required [:twitter_username]
   
-  credit "http://twitter.com/#{Caboodle::Site.twitter_username}", "Follow @#{Caboodle::Site.twitter_username} on Twitter"
+  credit "http://twitter.com/#{twitter_username}", "Follow @#{twitter_username} on Twitter"
   
   add_sass ["twitter"]
 end
