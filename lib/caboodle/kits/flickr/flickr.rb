@@ -12,7 +12,7 @@ module Caboodle
         doc = ::Nokogiri::XML.parse(open(url).read)
         val = doc.css("owner").first.attributes["nsid"].value
         Site.flickr_user_id = val
-        Caboodle::Kit.dump_config
+        Kit.dump_config
       end
       Site.flickr_user_id
     end
@@ -22,7 +22,7 @@ module Caboodle
     end
   
     declare "photosets" do |r|
-      r.url = "http://api.flickr.com/services/rest/?method=flickr.photosets.getList&api_key=#{Site.flickr_api_key}&user_id=#{Caboodle::FlickrAPI.flickr_user_id}"
+      r.url = "http://api.flickr.com/services/rest/?method=flickr.photosets.getList&api_key=#{Site.flickr_api_key}&user_id=#{FlickrAPI.flickr_user_id}"
       r.via = :get
     end
     
@@ -59,7 +59,7 @@ module Caboodle
     get "/photography/:set_id" do |set_id|
       @photosets = FlickrAPI.photosets rescue []
       @set_id = set_id
-      @photoset = Caboodle::FlickrAPI.photoset_info(@set_id) rescue nil
+      @photoset = FlickrAPI.photoset_info(@set_id) rescue nil
       @title = "Photography: #{@photoset.title if @photoset.respond_to?(:title)}"
       haml :photography
     end
