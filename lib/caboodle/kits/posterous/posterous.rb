@@ -131,6 +131,10 @@ module Caboodle
   
     description "Displays a Posterous blog with permalinks, pagination and commends if the Disqus kit is included"
     
+    required [:posterous_sitename, :posterous_username, :posterous_password]
+    
+    optional [:disqus]
+    
     get "/posterous/:page_number" do |page_number|
       @posts = PosterousPost.page(page_number)
       not_found if @posts.class == Array && @posts.blank?
@@ -150,12 +154,8 @@ module Caboodle
       @posts = PosterousPost.all(:page=>(params[:page] || 1))
       haml :posts.to_sym
     end
-    
-    required [:posterous_sitename, :posterous_username, :posterous_password]
-    
-    optional [:disqus]
-    
-    stylesheets ["http://disqus.com/stylesheets/#{disqus}/disqus.css?v=2.0"]
+
+    stylesheets ["http://disqus.com/stylesheets/#{disqus}/disqus.css?v=2.0"] if disqus
      
     rss ["feed://stef.posterous.com/rss.xml"]
     

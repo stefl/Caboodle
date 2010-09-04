@@ -1,7 +1,7 @@
 !!!
 %html{:dir => "ltr", :lang => "en-US", :xmlns => "http://www.w3.org/1999/xhtml"}
   %head{:profile => "http://gmpg.org/xfn/11"}
-    %link{:href => Caboodle::Site.url_base, :rel => "index", :title => Caboodle::Site.title}/
+    %link{:href => @url_base, :rel => "index", :title => @title}/
     %meta{:content => "text/html; charset=utf-8", "http-equiv" => "content-type"}/
     %meta{:content => "index,follow", :name => "robots"}/
     %meta{:content => "Caboodle", :name => "generator"}/
@@ -37,18 +37,18 @@
       = before_header
       %header#site-header
         = above_header
-        - unless Caboodle::Site.logo_url.to_s.blank?
+        - unless @logo_url.to_s.blank?
           #logo
-            %a{:href => "/", :rel => "home", :title => Caboodle::Site.title }
-              %img{:src=>Caboodle::Site.logo_url, :width=>"64", :height=>"64"}
-        - unless Caboodle::Site.title.blank?
+            %a{:href => "/", :rel => "home", :title => @title }
+              %img{:src=>@logo_url, :width=>"64", :height=>"64"}
+        - unless @title.blank?
           #site-title
             %h1
-              %a{:href => "/", :rel => "home", :title => Caboodle::Site.title }
-                = Caboodle::Site.title
-        - unless Caboodle::Site.description.to_s.blank?
+              %a{:href => "/", :rel => "home", :title => @title }
+                = @title
+        - unless @description.to_s.blank?
           #site-description
-            %h2= Caboodle::Site.description
+            %h2= @description
         #access
           .skip-link
             %a{:href => "#content", :title => "Skip navigation to the content"} Skip to content
@@ -101,11 +101,11 @@
       = before_footer
       %footer#footer
         = above_footer
-        - if Caboodle::Site.has_footer
+        - if @has_footer
           %p
             \&copy; 
-            = Caboodle::Site.author
-            - if Caboodle::Site.has_caboodle_link
+            = @author
+            - if @has_caboodle_link
               |
               Powered by 
               %a{:href=>"http://github.com/stefl/caboodle"}
