@@ -1,8 +1,8 @@
 - #todo - this should be a vcalendar
 #history.page
   %dl
-    - if Caboodle::History::Config.history_years.respond_to?(:sort)
-      - Caboodle::History::Config.history_years.sort.reverse.each do |year,items|
+    - if @history_years.respond_to?(:sort)
+      - @history_years.sort.reverse.each do |year,items|
         %dt.year{:class=>year}
           = year
         %dd

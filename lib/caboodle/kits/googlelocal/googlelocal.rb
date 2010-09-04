@@ -10,14 +10,14 @@ module Caboodle
     stylesheets ["http://www.google.com/uds/solutions/mapsearch/gsmapsearch.css", "http://www.google.com/uds/css/gsearch.css"]
     
     before do
-      @locations = Config.google_local_locations
-      @location = Config.google_local_locations.first
+      @locations = Settings.google_local_locations
+      @location = Settings.google_local_locations.first
     end
     
     menu "Near me"
     
     get "/near_me/:slug" do
-      Config.google_local_locations.each do |loc|
+      Settings.google_local_locations.each do |loc|
         if loc.title.downcase.gsub(" ","-") == params[:slug]
           @location = loc
         end

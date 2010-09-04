@@ -17,6 +17,13 @@ module Caboodle
     before do
       Caboodle::Site.cache_for ||= 600
       response.headers['Cache-Control'] = "public, max-age=#{Caboodle::Site.cache_for}"
+      
+      env['caboodle.config'] ||= Caboodle::Site.clone
+      env['caboodle.config'].merge!(Settings)
+      
+      env['caboodle.config'].each do |k,v|
+        self.instance_variable_set("@#{k}".to_sym,v)
+      end
     end
     
     error SocketError do
@@ -25,28 +32,11 @@ module Caboodle
       haml File.open(File.join(Caboodle::Kit.root, "views","error.haml")).read
     end
     
-    Config = Hashie::Mash.new
-    
-    def markdown sym
-      puts sym
-      md = File.expand_path(File.join(Caboodle::App.root,"config","#{sym.to_s}.md"))
-      @content = Maruku.new(open(md).read).to_html_document
-      haml ".page.about.thin_page= @content"
-    end
+    Settings = Hashie::Mash.new
     
     class << self
       
       attr_accessor :credit_link
-        
-      def configure_site config_path
-        set :config_path, config_path
-        if File.exists?(config_path)
-          Caboodle::Kit.load_config(config_path)
-          Caboodle::Kit.setup
-        else
-          puts "No such configuration file: #{config_path}"
-        end
-      end
       
       def inherited subclass
         set :kit_root, File.expand_path(File.dirname(caller[0].split(/:in/).last))
@@ -63,33 +53,12 @@ module Caboodle
         true
       end
       
-      def load_config p
-        set :config, p
-        loaded = YAML.load_file(p)
-        Hashie::Mash.new(loaded).each{ |k,v| 
-          v.strip! if v.class == String
-          Caboodle::Site[k.to_s] = v } rescue puts "Warning! Skipping #{p}"
-        Caboodle::Site.kits.uniq!
-      end
-      
       def load_custom_config p
         loaded = YAML.load_file(p)
         Hashie::Mash.new(loaded).each{ |k,v| 
           v.strip! if v.class == String
-          Config[k.to_s] = v 
+          Settings[k.to_s] = v 
         }
-      end
-
-      def dump_config
-        begin
-          p = config
-          d = Caboodle::Site.clone
-          e = d.to_hash
-          e.delete("required_settings")
-          File.open(p, 'w') {|f| f.write(YAML::dump(e))}
-        rescue
-          puts "Cannot write to config file: #{p}"
-        end
       end
       
       def config_files array_of_files
@@ -121,117 +90,9 @@ module Caboodle
         puts "\n"
         puts "#{name.to_s.split("::").last}: #{string}"
       end
-
-      def setup
-        require_all
-        use_all
-      end
-      
-      def load_kit name
-        unless name.blank?
-          kit_name = name.to_s.split("::").last || name
-          kit_name = kit_name.downcase
-          orig = Caboodle.constants
-          begin
-            require "caboodle/kits/#{kit_name}/#{kit_name}"
-            added = Caboodle.constants - orig
-            added.each do |d| 
-              c = Caboodle.const_get(d)
-              if c.respond_to?(:is_a_caboodle_kit)
-                c.register_kit
-              end
-            end
-          rescue Exception=>e
-            if ENV["RACK_ENV"] == "production"
-              Caboodle::Errors << Hashie::Mash.new({:title=>"Failed to load #{name} kit", :reason=>e.backtrace})
-            else
-              raise e
-            end
-          end
-        end
-        Caboodle::Kits
-      end
-      
-      def unload_kit name
-        unless name.blank?
-          kit_name = name.to_s.split("::").last || name
-          kit_name = kit_name.downcase
-          puts "Unloading Kit: #{kit_name}"
-          orig = Caboodle.constants
-          require "caboodle/kits/#{kit_name}/#{kit_name}"
-          added = Caboodle.constants - orig
-          added.each do |d| 
-            c = Caboodle.const_get(d)
-            if c.respond_to?(:is_a_caboodle_kit)
-              c.unregister_kit
-            end
-          end
-        end
-        Caboodle::Kits
-      end
       
       def name
         self.to_s.split("::").last
-      end
-      
-      def register_kit
-        ask_user_for_missing_settings
-        Site.kits << name
-        Site.kits.uniq!
-        Caboodle::Kits << self
-        Caboodle::Kits
-      end
-      
-      def ask_user r, optional=false       
-        unless ENV["RACK_ENV"] == "production"
-          puts " "
-          opt = "Optional: " if optional
-          puts "#{opt}Please set a value for #{r}:"
-          v = STDIN.gets
-          Caboodle::Site[r] = v
-          Caboodle::Kit.dump_config
-        end
-      end
-      
-      def ask_user_for_missing_settings
-        required_settings.each do |r|
-          if Caboodle::Site[r].blank?
-            ask_user r
-          end
-          self.set r.to_s.to_sym, Caboodle::Site[r].to_s
-        end
-        optional_settings.each do |r|
-          unless defined?(Caboodle::Site[r])
-            ask_user r, true
-          end
-          self.set r.to_s.to_sym, Caboodle::Site[r].to_s
-        end
-      end
-      
-      def ask_user_for_all_missing_settings
-        Caboodle::Kits.each do |kit|
-          kit.ask_user_for_missing_settings
-        end
-      end
-      
-      def unregister_kit
-        Caboodle::Kits.delete(self)
-        Caboodle::Site.kits.delete(self.to_s)
-        Caboodle::Kit.dump_config
-        Caboodle::Kits
-      end      
-    
-      def require_all
-        if(Caboodle::Site.kits)
-          Caboodle::Site.kits.each { |k| load_kit k }
-        else
-          STDERR.puts "No kits to register"
-        end
-        Caboodle::Kits
-      end
-    
-      def use_all
-        Caboodle::Kits.each { |p| p.start }
       end
     
       def menu display, path=nil, &block
@@ -272,11 +133,13 @@ module Caboodle
         if keys.class == Array
           keys.each do |k| 
             self.optional_settings << k
+            self.set k.to_s.to_sym, Caboodle::Site[k].to_s
           end
         else
           self.optional_settings << keys
         end
-        self.optional_settings      end
+        self.optional_settings      
+      end
       
       def stylesheets array_of_css_files
         if array_of_css_files.class == Array
@@ -355,17 +218,60 @@ module Caboodle
         OptionalSettings[kit_name] ||= [] 
         OptionalSettings[kit_name]
       end
+      
+      def register_kit ask=true
+        ask_user_for_missing_settings if ask
+        Site.kits << name
+        Site.kits.uniq!
+        Caboodle::Kits << self
+        Caboodle::Kits
+      end
+      
+      def unregister_kit
+        Caboodle::Kits.delete(self)
+        Caboodle::Site.kits.delete(self.to_s)
+        Caboodle::Config.dump_config
+        Caboodle::Kits
+      end
+      
+      def ask_user r, optional=false       
+        unless ENV["RACK_ENV"] == "production"
+          puts " "
+          opt = "Optional: " if optional
+          puts "#{opt}Please set a value for #{r}:"
+          v = STDIN.gets
+          Caboodle::Site[r] = v
+          Caboodle::Config.dump_config
+        end
+      end
+
+      def ask_user_for_missing_settings
+        required_settings.each do |r|
+          if Caboodle::Site[r].blank?
+            ask_user r
+          end
+          puts self
+          self.set r.to_s.to_sym, Caboodle::Site[r].to_s
+        end
+        optional_settings.each do |r|
+          unless defined?(Caboodle::Site[r])
+            ask_user r, true
+          end
+          self.set r.to_s.to_sym, Caboodle::Site[r].to_s
+        end
+      end
+
+      def ask_user_for_all_missing_settings
+        Caboodle::Kits.each do |kit|
+          kit.ask_user_for_missing_settings
+        end
+      end
     
       def kit_name
         self.ancestors.first.to_s.split("::").last
       end
       
-      def available_kits
-        Dir.new(File.join(File.dirname(__FILE__),"kits")).entries.delete_if{|a| a[0,1]=="."}
-      end
-      
       def start
-        
         errors = []
         self.required_settings.each do |s|
           if Site[s].blank?
@@ -382,10 +288,7 @@ module Caboodle
           Caboodle::Errors << Hashie::Mash.new(:title=>"#{kit_name} is disable", :reason=>errors.join(";"))
         end
       end
-      
-      def method_missing meth
-        Caboodle::Site[meth]
-      end
+
     end
   end
 end

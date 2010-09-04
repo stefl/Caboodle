@@ -4,12 +4,8 @@ class Caboodle::Lastfm < Caboodle::Kit
   
   required [:lastfm_username]
   
-  def scrape 
-    @last ||= Caboodle.scrape("http://www.last.fm/user/#{lastfm_username}")
-  end
-  
   menu "Listening" do
-
+    scrape = Caboodle.scrape("http://www.last.fm/user/#{Caboodle::Site.lastfm_username}")
     @recent = scrape.css("#recentTracks .module-body").to_html
     @recent.gsub!("href=\"/", 'href="http://last.fm/')
     @top = scrape.css(".modulechartsartists .module-body").to_html

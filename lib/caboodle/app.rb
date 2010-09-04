@@ -5,11 +5,12 @@ module Caboodle
     set :root, File.expand_path(".")
     set :views, Proc.new { File.join(root, "views") }
     set :public, Proc.new { File.join(root, "public") }
+    set :run, false
     
     helpers Sinatra::CaboodleHelpers
     
     configure do
-      Caboodle::Kit.configure_site File.expand_path(File.join(Caboodle::App.root,"config","site.yml"))
+      Caboodle::Config.configure_site open(File.expand_path(File.join(Caboodle::App.root,"config","site.yml"))).read
     end
   
   end
