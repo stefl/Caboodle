@@ -230,7 +230,7 @@ module Caboodle
       def unregister_kit
         Caboodle::Kits.delete(self)
         Caboodle::Site.kits.delete(self.to_s)
-        Caboodle::Config.dump_config
+        Caboodle::Kit.dump_config
         Caboodle::Kits
       end
       
@@ -241,7 +241,7 @@ module Caboodle
           puts "#{opt}Please set a value for #{r}:"
           v = STDIN.gets
           Caboodle::Site[r] = v
-          Caboodle::Config.dump_config
+          Caboodle::Kit.dump_config
         end
       end
 
@@ -267,8 +267,31 @@ module Caboodle
         end
       end
     
+      def dump_config
+        begin
+          puts "Dump config to: #{config_path}"
+          p = config_path
+          d = Caboodle::Site.clone
+          e = d.to_hash
+          e.delete("required_settings")
+          File.open(p, 'w') {|f| f.write(YAML::dump(e))}
+        rescue
+          puts "Cannot write to config file: #{p}"
+        end
+      end
+      
+      def configure_site configuration_yaml_path
+        self.set :config_path, configuration_yaml_path
+        Caboodle::Config.load_config(open(configuration_yaml_path).read)
+        Caboodle::Config.setup
+      end
+      
       def kit_name
         self.ancestors.first.to_s.split("::").last
+      end
+      
+      def available_kits
+        Dir.new(File.join(File.dirname(__FILE__),"kits")).entries.delete_if{|a| a[0,1]=="."}
       end
       
       def start

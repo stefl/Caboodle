@@ -39,13 +39,13 @@
         = above_header
         - unless @logo_url.to_s.blank?
           #logo
-            %a{:href => "/", :rel => "home", :title => @title }
-              %img{:src=>@logo_url, :width=>"64", :height=>"64"}
+            %a{:href => "/", :rel => "home", :title => Caboodle::Site.title }
+              %img{:src=>@logo_url, :width=>"64", :height=>"64", :alt=>"Logo"}
         - unless @title.blank?
           #site-title
             %h1
-              %a{:href => "/", :rel => "home", :title => @title }
-                = @title
+              %a{:href => "/", :rel => "home", :title => Caboodle::Site.title }
+                = Caboodle::Site.title
         - unless @description.to_s.blank?
           #site-description
             %h2= @description

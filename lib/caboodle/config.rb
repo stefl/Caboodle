@@ -18,10 +18,6 @@ module Caboodle
   
   module Config
     class << self
-      def configure_site configuration_yaml
-        load_config(configuration_yaml)
-        setup
-      end
       
       def setup
         require_all
@@ -38,18 +34,6 @@ module Caboodle
 
       def load_config_file p
         configure_site(open(p).read)
-      end
-
-      def dump_config
-        begin
-          p = config
-          d = Caboodle::Site.clone
-          e = d.to_hash
-          e.delete("required_settings")
-          File.open(p, 'w') {|f| f.write(YAML::dump(e))}
-        rescue
-          puts "Cannot write to config file: #{p}"
-        end
       end
     
       def require_all ask=true
@@ -107,10 +91,6 @@ module Caboodle
           end
         end
         Caboodle::Kits
-      end
-      
-      def available_kits
-        Dir.new(File.join(File.dirname(__FILE__),"kits")).entries.delete_if{|a| a[0,1]=="."}
       end
       
     end
