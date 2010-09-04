@@ -12,7 +12,7 @@ module Caboodle
         doc = ::Nokogiri::XML.parse(open(url).read)
         val = doc.css("owner").first.attributes["nsid"].value
         Site.flickr_user_id = val
-        Kit.dump_config
+        Config.dump_config
       end
       Site.flickr_user_id
     end
@@ -51,6 +51,8 @@ module Caboodle
     
     description "A browsable Flickr.com gallery with sets"
     
+    required [:flickr_username, :flickr_api_key]
+    
     menu "Photography" do
       @photosets = FlickrAPI.photosets rescue []
       haml :photography
@@ -63,8 +65,6 @@ module Caboodle
       @title = "Photography: #{@photoset.title if @photoset.respond_to?(:title)}"
       haml :photography
     end
-    
-    required [:flickr_username, :flickr_api_key]
     
     javascripts ["/galleria.noconflict.min.js"]
     

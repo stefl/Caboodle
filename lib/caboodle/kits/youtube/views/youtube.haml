@@ -1,0 +1,7 @@
+.page.thin_page.youtube
+  - @videos.each do |video|
+    %article.youtube_video
+      %h2
+        = video.title
+      = video.embed_html
+  
