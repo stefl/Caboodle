@@ -99,21 +99,19 @@ module Caboodle
         #todo proper slugify
         slug = display.downcase.gsub(" ","-").gsub("'","")
         path = "/#{slug}" unless path
-        path = "/" if Site.home_kit == self.to_s.gsub("Caboodle::","")
+        puts "set /#{slug} - menu items: #{Settings.menu_items.inspect}"
+        path = "/" if Site.home_kit == self.to_s.gsub("Caboodle::","") && !Settings.menu_items.include?("/")
         Caboodle::MenuItems << {:display=>display, :link=>path, :kit=>self}
-        self.before {@title = display}
         if block
           self.get path, &block
         else
           eval "self.get '#{path}' do
+          @title = '#{display}'
           haml :#{slug.gsub("-","_")}
           end"
         end
-        @@has_menu = true
-      end
-      
-      def has_menu?
-        defined?(@@has_menu)
+        Settings.menu_items ||= [] 
+        Settings.menu_items << path
       end
       
       def required keys

@@ -10,13 +10,14 @@ module Caboodle
     add_sass ["feed"]
     
     configure do
-      puts "Configure it"
-      puts Settings.feeds.inspect
-      Settings.feeds.each do |feed_name,feed_url|
-        menu feed_name do
-          @feed = FeedNormalizer::FeedNormalizer.parse open(feed_url)
-          @feed.clean!
-          haml :feed
+      if Settings.feeds
+        Settings.feeds.map{|q| q.first}.each do |feed_name,feed_url|
+          puts "menu #{feed_name}" 
+          menu feed_name do
+            @feed = FeedNormalizer::FeedNormalizer.parse open(feed_url)
+            @feed.clean!
+            haml :feed
+          end
         end
       end
     end
