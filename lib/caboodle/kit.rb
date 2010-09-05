@@ -102,14 +102,19 @@ module Caboodle
         puts "set /#{slug} - menu items: #{Settings.menu_items.inspect}"
         path = "/" if Site.home_kit == self.to_s.gsub("Caboodle::","") && !Settings.menu_items.include?("/")
         Caboodle::MenuItems << {:display=>display, :link=>path, :kit=>self}
+        
         if block
           self.get path, &block
         else
           eval "self.get '#{path}' do
-          @title = '#{display}'
           haml :#{slug.gsub("-","_")}
           end"
         end
+        
+        eval "before '/#{path}' do
+          @title = '#{display}'
+        end"
+        
         Settings.menu_items ||= [] 
         Settings.menu_items << path
       end
