@@ -23,6 +23,7 @@ begin
     gem.add_dependency "tumblr-rb"
     gem.add_dependency "rack-geo"
     gem.add_dependency "maruku"
+    gem.add_dependency "youtube-g"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
