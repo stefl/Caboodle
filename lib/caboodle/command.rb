@@ -51,12 +51,17 @@ module Caboodle
           puts "The following kits are loaded"
           configure
           puts Caboodle::Site.kits.join("\n")
-        when "deploy"
+        when "heroku:create"
+          gem 'heroku'
+          require 'heroku'
+          require 'heroku/command'
+          `heroku create #{args[0]}`
+        when "heroku:deploy"
           gem 'heroku'
           require 'heroku'
           require 'heroku/command'
         
-          puts `git commit -m"deploy" -a`
+          puts `git commit -m"heroku:deploy" -a`
           puts `git push heroku master`
         else
           puts "Sorry, that command is not recognized" unless command == "help"
@@ -70,7 +75,8 @@ module Caboodle
           puts "caboodle config:list - shows the configuration variables"
           puts "caboodle config:set <variable name> <value> - sets a value for the configuration variable"
           puts "caboodle config:get <variable name> - shows the value of the configuration variable"
-          puts "caboodle deploy - pushes the caboodle to Heroku"
+          puts "caboodle heroku:create - sets up a new Heroku instance"
+          puts "caboodle heroku:deploy - pushes the caboodle to Heroku"
         end
       end
     end
