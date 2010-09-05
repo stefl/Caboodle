@@ -1,4 +1,4 @@
-!http://posterous.com/getfile/files.posterous.com/temp-2010-08-17/JGcuaytyAkpyFrgqaioavulpEcdrfgCGeilGpHAEzvtgAfFnimzzEJarawqG/caboodle.png.scaled1000.png!
+!http://img.skitch.com/20100905-fsdm4du28y6cpbbf8p3b187j18.png!
 
 h2. Caboodle is a quick and easy way to create a mashup website
 
@@ -20,7 +20,18 @@ myproject
 Please set a value for flickr_apikey
 b1789c432a78990b44d39ff
 
-caboodle deploy</pre>
+caboodle kit:add tumblr
+
+Please set a value for tumblr_username
+myproject
+
+caboodle kit:home tumblr
+
+(Sets the Tumblr kit as the home page)
+
+caboodle heroku:create myproject
+
+caboodle heroku:deploy</pre>
 
 h2. "WIKI":http://wiki.github.com/steflewandowski/Caboodle/
 
