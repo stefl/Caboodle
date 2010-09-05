@@ -24,6 +24,7 @@ begin
     gem.add_dependency "rack-geo"
     gem.add_dependency "maruku"
     gem.add_dependency "youtube-g"
+    gem.add_dependency "feed-normalizer"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError

@@ -1,0 +1,7 @@
+#feed.page.thin_page
+  %section.feed_posts
+    - @feed.entries.each do |post|
+      %article
+        %h2
+          = post.title
+        = post.content
