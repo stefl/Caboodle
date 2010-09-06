@@ -24,7 +24,7 @@ module Caboodle
       end
             
       if @location
-        haml :googlelocal
+        haml :near_me
       else
         redirect "/near_me" 
       end
