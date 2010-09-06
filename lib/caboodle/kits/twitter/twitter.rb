@@ -10,9 +10,13 @@ module Caboodle
     menu "Twitter"
   
     configure do
-      if Site.logo_url.to_s.blank? && !Site.twitter_username.to_s.blank?
-        xml = Nokogiri::XML(open("http://twitter.com/users/#{Site.twitter_username}.xml").read)
-        Site.logo_url = xml.css("profile_image_url").children.first.to_s 
+      begin
+        if Site.logo_url.to_s.blank? && !Site.twitter_username.to_s.blank?
+          xml = Nokogiri::XML(open("http://twitter.com/users/#{Site.twitter_username}.xml").read)
+          Site.logo_url = xml.css("profile_image_url").children.first.to_s 
+        end
+      rescue Exception=>e
+        Caboodle::Errors << Hashie::Mash.new({:title=>"Problem communicating with Twitter at startup", :reason=>e.backtrace})
       end
     end
   

@@ -16,10 +16,12 @@ module Caboodle
           puts `cd #{site_name} && cp -i #{File.expand_path(File.join(File.dirname(__FILE__), 'app'))}/config.ru .`
           puts `cd #{site_name} && cp -ri #{File.expand_path(File.join(File.dirname(__FILE__), 'app'))}/config .`
           puts `cd #{site_name} && cp -i #{File.expand_path(File.join(File.dirname(__FILE__), 'app'))}/.gems .`
-          puts `cd #{site_name} && cp -i #{File.expand_path(File.join(File.dirname(__FILE__), 'app'))}/public .`
+          puts `cd #{site_name} && cp -ri #{File.expand_path(File.join(File.dirname(__FILE__), 'app'))}/public .`
+          puts `cd #{site_name} && cp -ri #{File.expand_path(File.join(File.dirname(__FILE__), 'app'))}/pages .`
+          puts `cd #{site_name} && cp -ri #{File.expand_path(File.join(File.dirname(__FILE__), 'app'))}/scss .`
           puts `cd #{site_name} && git init`
           config = File.expand_path(File.join(".",site_name,"config","site.yml"))
-          Caboodle::Config.configure_site config
+          Caboodle::Kit.configure_site config
           puts "Please set a few settings to get started"
           Caboodle::Kit.ask_user_for_all_missing_settings
           puts `cd #{site_name} && git add .`

@@ -55,7 +55,7 @@ module Caboodle
           kit_name = kit_name.downcase
           orig = Caboodle.constants
           begin
-            puts kit_name
+            puts "Loading #{kit_name}"
             require "caboodle/kits/#{kit_name}/#{kit_name}"
             added = Caboodle.constants - orig
             added.each do |d| 
