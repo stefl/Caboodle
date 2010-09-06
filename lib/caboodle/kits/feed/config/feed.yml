@@ -1,2 +1,3 @@
 :feeds:
-  News: http://feeds.feedburner.com/github
+  -
+    News: http://feeds.feedburner.com/github

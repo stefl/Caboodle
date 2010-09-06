@@ -12,7 +12,6 @@ module Caboodle
     configure do
       if Settings.feeds
         Settings.feeds.map{|q| q.first}.each do |feed_name,feed_url|
-          puts "menu #{feed_name}" 
           menu feed_name do
             @feed = FeedNormalizer::FeedNormalizer.parse open(feed_url)
             @feed.clean!
