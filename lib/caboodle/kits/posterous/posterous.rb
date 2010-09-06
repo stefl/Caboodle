@@ -60,7 +60,9 @@ module Caboodle
       opts["title"] = doc.css('title').inner_html.split(" - ").first
       opts["link"] = "http://#{Site.posterous_sitename}.posterous.com/#{slug}"
       perma = doc.css('.permalink').inner_html
-      opts["date"] = Date.parse(perma)
+      date = doc.css('article time').first["datetime"]
+      puts date
+      opts["date"] = Date.parse(date)
       PosterousPost.new(opts)
     end
   

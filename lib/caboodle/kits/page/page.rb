@@ -14,6 +14,7 @@ module Caboodle
       pages.each do |page|
         puts "Add page: #{page}"
         menu "#{page.capitalize.gsub('_',' ')}" do
+          @title = page.capitalize.gsub('_',' ')
           markdown :"#{page}"
         end
       end

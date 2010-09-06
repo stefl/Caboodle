@@ -73,7 +73,7 @@ section#main {
   {
     h1, h2 {
       @include adjust-font-size-to(48px);
-      color: #aaa;
+      color: $header_color;
       @include prefix(2);
     }
   }
@@ -88,9 +88,9 @@ section#main {
     article {
       @include trailer(2,32px);
       aside {
-        color: #aaa;
+        color: $article_color;
         a {
-          color: #999;
+          color: $article_color;
         }
       }
     }

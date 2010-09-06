@@ -96,6 +96,8 @@ module Caboodle
       end
     
       def menu display, path=nil, &block
+        Settings.menu_items ||= [] 
+        
         #todo proper slugify
         slug = display.downcase.gsub(" ","-").gsub("'","")
         path = "/#{slug}" unless path
@@ -115,7 +117,6 @@ module Caboodle
           @title = '#{display}'
         end"
         
-        Settings.menu_items ||= [] 
         Settings.menu_items << path
       end
       
