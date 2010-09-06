@@ -2,16 +2,18 @@
 
 h2. Caboodle is a quick and easy way to create a mashup website
 
-A quick demonstration if you are familiar with Ruby:
+What a Caboodle-based site looks like out of the box:
+
+"Stef.io":http://stef.io 
+
+How you set one up (assuming you are familiar with Ruby)
 
 <pre>sudo gem install caboodle
   
 caboodle create myproject
-
 (Respond to some questions, such as setting the site's title)
 
 cd myproject
-
 caboodle kit:add flickr
 
 Please set a value for flickr_username
@@ -21,16 +23,13 @@ Please set a value for flickr_apikey
 b1789c432a78990b44d39ff
 
 caboodle kit:add tumblr
-
 Please set a value for tumblr_username
 myproject
 
 caboodle kit:home tumblr
-
 (Sets the Tumblr kit as the home page)
 
 caboodle heroku:create myproject
-
 caboodle heroku:deploy</pre>
 
 h2. "WIKI":http://wiki.github.com/steflewandowski/Caboodle/
