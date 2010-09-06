@@ -99,7 +99,6 @@ module Caboodle
         #todo proper slugify
         slug = display.downcase.gsub(" ","-").gsub("'","")
         path = "/#{slug}" unless path
-        puts "set /#{slug} - menu items: #{Settings.menu_items.inspect}"
         path = "/" if Site.home_kit == self.to_s.gsub("Caboodle::","") && !Settings.menu_items.include?("/")
         Caboodle::MenuItems << {:display=>display, :link=>path, :kit=>self}
         
@@ -107,11 +106,12 @@ module Caboodle
           self.get path, &block
         else
           eval "self.get '#{path}' do
+          @title = '#{display}'
           haml :#{slug.gsub("-","_")}
           end"
         end
         
-        eval "before '/#{path}' do
+        eval "before do
           @title = '#{display}'
         end"
         
@@ -123,7 +123,6 @@ module Caboodle
         if keys.class == Array
           keys.each do |k| 
             self.required_settings << k
-            puts "self.set #{k}, #{Caboodle::Site[k]}"
             self.set k.to_s.to_sym, Caboodle::Site[k].to_s
           end
         else
@@ -253,7 +252,6 @@ module Caboodle
           if Caboodle::Site[r].blank?
             ask_user r
           end
-          puts self
           self.set r.to_s.to_sym, Caboodle::Site[r].to_s
         end
         optional_settings.each do |r|
@@ -272,7 +270,6 @@ module Caboodle
     
       def dump_config
         begin
-          puts "Dump config to: #{config_path}"
           p = config_path
           d = Caboodle::Site.clone
           e = d.to_hash
