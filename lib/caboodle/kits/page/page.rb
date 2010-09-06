@@ -1,65 +1,21 @@
-require 'haml'
-
 module Caboodle
-  Pages = []
-  class Page
-  
-    attr_accessor :slug
-    attr_accessor :body
-    attr_accessor :file
-  
-    def initialize slug
-      @slug = slug
-    end
-  
-    def file
-      @file ||= File.new(Dir[File.join(File.dirname(__FILE__),"pages","#{@slug}.haml")].first)
-    end
-  
-    def self.all
-      return Caboodle::Pages unless Caboodle::Pages.empty?
-      Dir[File.join(File.dirname(__FILE__),"pages","*.haml")].map do |a| 
-        p = Page.new(a.split("/").last.gsub(".haml",""))
-        Caboodle::Pages << p
-        Caboodle::MenuItems << {:display=>p.title, :link=>p.link}
+  class Page < Caboodle::Kit
+    
+    description "Create markdown pages in the config directory and they are displayed as menu items and pages"
+
+    configure do
+      pages = []
+      Dir[File.join(Caboodle::App.root,"pages","*.md")].map do |a| 
+        pages << a.split("/").last.split(".").first
       end
       
-      return Caboodle::Pages
-    end
-  
-    def self.get slug
-      STDERR.puts "Get page: #{slug}"
-      return nil unless Caboodle::Pages.map{|a| a.slug}.include?(slug)
-      Page.new(slug.gsub(" ", "_"))
-    end
-  
-    def body
-      @body ||= file.read
-    end
-  
-    def to_html
-      Haml::Engine.new(body).render
-    end
-  
-    def title
-      @slug.gsub("_","").capitalize
-    end
+      puts pages.inspect
     
-    def link
-      "/#{slug}"
-    end
-  
-  end
-  
-  class PageApp < Caboodle::Kit
-        
-    Caboodle::Site.pages = Caboodle::Page.all
-    Caboodle::Site.pages.each do |page|
-      get "/#{page.slug}" do
-        @page = Page.get(request.path_info.gsub("/",""))
-        pass if @page.blank?
-        @title = @page.title
-        haml :page, :locals => {:page => @page}
+      pages.each do |page|
+        puts "Add page: #{page}"
+        menu "#{page.capitalize.gsub('_',' ')}" do
+          markdown :"#{page}"
+        end
       end
     end
   end
