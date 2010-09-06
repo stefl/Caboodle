@@ -8,11 +8,15 @@ module Caboodle
   
     def initialize(opts={})
       Site.posterous_password ||= ENV["posterous_password"]
-      self.credentials(opts[:username] || Site.posterous_username, opts[:password] || Site.posterous_password)
+      
+      u = opts[:email] || Site.posterous_email
+      p = opts[:password] || Site.posterous_password
+      
+      self.credentials(u, p)
       sitename = opts[:sitename] || Site.posterous_sitename
       unless defined?(Site.posterous_site_id)
-        sites = Hashie::Mash.new(getsites.perform_sleepily.parse).rsp.site
-      
+        response = Hashie::Mash.new(getsites.perform_sleepily.parse)
+        sites = response.rsp.site        
         sites.each do |site|
           if site.url.include?("http://#{Site.posterous_sitename}.posterous.com")
             Site.posterous_site_id = site.id
@@ -70,7 +74,9 @@ module Caboodle
       p = PosterousAPI.new
       opts[:site_id] = Site.posterous_site_id 
       rsp = p.all(opts).perform_sleepily.parse["rsp"]
-      rsp["post"].each{|a| r << PosterousPost.new(a)} if rsp["post"]
+      posts = rsp["post"]
+      posts = [posts] if posts.class == Hash
+      posts.each{|a| r << PosterousPost.new(a) } if posts
       r
     end
   
@@ -79,6 +85,7 @@ module Caboodle
     end
   
     def [] k
+      @attributes = {} if @attributes.nil?
       @attributes[k]
     end
   
@@ -131,7 +138,7 @@ module Caboodle
   
     description "Displays a Posterous blog with permalinks, pagination and commends if the Disqus kit is included"
     
-    required [:posterous_sitename, :posterous_username, :posterous_password]
+    required [:posterous_sitename, :posterous_email, :posterous_password]
     
     optional [:disqus]
     

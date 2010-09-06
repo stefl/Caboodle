@@ -4,6 +4,7 @@
       Sorry, there's a problem communicating with Posterous.com
   - else
     - @posts.each do |post|
+      - puts post.inspect
       = haml :_post, :layout=>false, :locals=>{:post=>post}
     %nav#pagination
       - page = params[:page].to_i if defined?(params[:page])
