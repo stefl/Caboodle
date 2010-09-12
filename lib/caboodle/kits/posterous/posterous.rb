@@ -55,14 +55,16 @@ module Caboodle
   
     def self.from_slug(slug)
       doc = Caboodle.scrape("http://#{Site.posterous_sitename}.posterous.com/#{slug}")
+      puts doc
       opts = {}
       opts["body"] = doc.css('div.bodytext').inner_html
       opts["title"] = doc.css('title').inner_html.split(" - ").first
       opts["link"] = "http://#{Site.posterous_sitename}.posterous.com/#{slug}"
       perma = doc.css('.permalink').inner_html
-      date = doc.css('article time').first["datetime"]
+      date = doc.css('article time').first["datetime"] if doc.css('article time').first
+      date ||= doc.css('.date .permalink').first.inner_html if doc.css('.date .permalink').first
       puts date
-      opts["date"] = Date.parse(date)
+      opts["date"] = Date.parse(date) if date
       PosterousPost.new(opts)
     end
   
