@@ -166,7 +166,7 @@ module Caboodle
 
     stylesheets ["http://disqus.com/stylesheets/#{disqus}/disqus.css?v=2.0"] if disqus
      
-    rss ["feed://stef.posterous.com/rss.xml"]
+    rss ["feed://#{posterous_sitename}.posterous.com/rss.xml"]
     
     credit "http://#{posterous_sitename}.posterous.com", "#{posterous_sitename} on Posterous"
     
