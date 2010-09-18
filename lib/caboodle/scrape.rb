@@ -25,7 +25,11 @@ module Caboodle
       ::Nokogiri::HTML(response)
     rescue Exception => e
       puts e.inspect
-      ::Nokogiri::HTML("")
+      if HAS_MEMCACHE
+        response = sleepy.get("0:#{url}")
+      end
+      response ||= ""
+      ::Nokogiri::HTML(response)
     end
   end
   
