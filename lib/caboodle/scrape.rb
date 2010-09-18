@@ -21,12 +21,17 @@ module Caboodle
   def self.scrape url
     begin
       if defined?(CACHE)
-        puts "Scraping with cache optimisation"
-        timeout = 60*60*1000
-        response = CACHE.get("#{round_time(Time.new.to_i, timeout)}:#{url}") rescue nil
-        response ||= open(url).read
-        CACHE.set("#{round_time(Time.new.to_i, timeout)}:#{url}", response)
-        CACHE.set("0:#{url}", response)
+        begin
+          puts "Scraping with cache optimisation"
+          timeout = 60*60*1000
+          response = CACHE.get("#{round_time(Time.new.to_i, timeout)}:#{url}") rescue nil
+          response ||= open(url).read
+          CACHE.set("#{round_time(Time.new.to_i, timeout)}:#{url}", response)
+          CACHE.set("0:#{url}", response)
+        rescue
+          # Probably a dead memcached server
+          response = open(url).read
+        end
       else
         puts "Scraping without cache optimisation"
         response = open(url).read
