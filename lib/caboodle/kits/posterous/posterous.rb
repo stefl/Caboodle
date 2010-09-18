@@ -65,7 +65,7 @@ module Caboodle
     def self.from_slug(slug)
       puts "Looking for http://#{Site.posterous_sitename}.posterous.com/#{slug}"
       doc = Caboodle.scrape("http://#{Site.posterous_sitename}.posterous.com/#{slug}")
-      puts doc
+      #puts doc
       opts = {}
       opts["body"] = doc.css('div.bodytext').inner_html
       opts["title"] = doc.css('title').inner_html.split(" - ").first
@@ -78,7 +78,7 @@ module Caboodle
       rescue
         opts["date"] = Date.parse(Time.now)
       end
-      puts opts["date"]
+      #puts opts["date"]
       PosterousPost.new(opts)
     end
   
@@ -92,7 +92,7 @@ module Caboodle
         r = []
         p = PosterousAPI.new
         opts[:site_id] = Site.posterous_site_id 
-        rsp = p.all(opts).perform.parse["rsp"]
+        rsp = p.all(opts).perform_sleepily.parse["rsp"]
         posts = rsp["post"]
         posts = [posts] if posts.class == Hash
         posts.each{|a| r << PosterousPost.new(a) } if posts
@@ -149,8 +149,7 @@ module Caboodle
   	end
 	
   	def date
-  	  puts attributes.inspect
-  	  @date ||= attributes["date"]
+  	  @date ||= Date.parse(attributes["date"]) rescue nil
     end
 
   	def full_url

@@ -5,6 +5,14 @@ require 'open-uri'
 
 module Caboodle
   
+  begin
+    require 'memcached'
+    CACHE = Memcached.new
+    puts "Running with memcache"
+  rescue
+    puts "Running without memcache"
+  end
+  
   def self.round_time(integer, factor)
     return integer if(integer % factor == 0)
     return integer - (integer % factor)
@@ -12,21 +20,22 @@ module Caboodle
   
   def self.scrape url
     begin
-      if HAS_MEMCACHE
+      if defined?(CACHE)
+        puts "Scraping with cache optimisation"
         timeout = 60*60*1000
-        sleepy = Memcached.new
-        response = sleepy.get("#{round_time(Time.new.to_i, timeout)}:#{url}") rescue nil
+        response = CACHE.get("#{round_time(Time.new.to_i, timeout)}:#{url}") rescue nil
         response ||= open(url).read
-        sleepy.set("#{round_time(Time.new.to_i, timeout)}:#{url}", response)
-        sleepy.set("0:#{url}", response)
+        CACHE.set("#{round_time(Time.new.to_i, timeout)}:#{url}", response)
+        CACHE.set("0:#{url}", response)
       else
+        puts "Scraping without cache optimisation"
         response = open(url).read
       end
       ::Nokogiri::HTML(response)
     rescue Exception => e
       puts e.inspect
-      if HAS_MEMCACHE
-        response = sleepy.get("0:#{url}")
+      if defined?(CACHE)
+        response = CACHE.get("0:#{url}")
       end
       response ||= ""
       ::Nokogiri::HTML(response)
