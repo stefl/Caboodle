@@ -2,6 +2,11 @@
   - if defined?(@posts) && @posts.nil?
     %h3
       Sorry, there's a problem communicating with Posterous.com
+    %p
+      You can view all of the posts at
+      %a{:href=>"http://#{Caboodle::Site.posterous_sitename}.posterous.com"}
+        = Caboodle::Site.posterous_sitename
+        on Posterous.com
   - else
     - @posts.each do |post|
       - puts post.inspect

@@ -1,5 +1,5 @@
 - post = locals[:post]
-
+      
 %article.post.hentry.publish{:class=>post.semantic_tags}
   - if locals[:full]
 
@@ -18,8 +18,9 @@
       %a.url.fn.n{:href => "/about", :title => "About the author"}= Caboodle::Site.author
     %span.meta-sep.meta-sep-entry-date |
     %span.meta-prep.meta-prep-entry-date Published:
-    %span.entry-date
-      %abbr.published{:title => post.date.strftime("%d")}= post.date.strftime("%b")
+    - if post.date
+      %span.entry-date
+        %abbr.published{:title => post.date.strftime("%d")}= post.date.strftime("%b")
     %small
       %span.tag-links
         = post.linked_tags

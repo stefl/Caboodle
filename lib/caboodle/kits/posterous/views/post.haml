@@ -1,9 +1,20 @@
 - if ENV["RACK_ENV"] == "development"
   :javascript
     var disqus_developer = true;
+
     
 %div.posterous
-  = haml :_post, :locals=>{:post=>post, :full=>true}, :layout=>false
+
+  - if post.nil?
+    %h3
+      Sorry, there's a problem communicating with Posterous.com
+    %p
+      You can view this post at
+      %a{:href=>"http://#{Site.posterous_sitename}.posterous.com/#{params[:slug]}"}
+        = posterous_sitename
+        on Posterous.com
+  - else      
+    = haml :_post, :locals=>{:post=>post, :full=>true}, :layout=>false
   - if Caboodle::Site.disqus
     #disqus_thread
     %script{:src => "http://disqus.com/forums/#{Caboodle::Site.disqus}/embed.js", :type => "text/javascript"}

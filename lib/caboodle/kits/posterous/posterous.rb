@@ -4,6 +4,13 @@ require 'weary'
 require 'nokogiri'
 
 module Caboodle
+  
+  class PosterousPostNotFound < Exception
+  end
+  
+  class PosterousProblem < Exception
+  end
+  
   class PosterousAPI < Weary::Base
   
     def initialize(opts={})
@@ -31,6 +38,7 @@ module Caboodle
       r.url = "http://posterous.com/api/getsites"
       r.via = :get
       r.authenticates = true
+      r.follows = true
       r.headers = {'Accept' => 'application/xml'}
     end
     
@@ -40,6 +48,7 @@ module Caboodle
       r.with = [:site_id,:tag,:num_posts,:page]
       r.requires = [:site_id]
       r.authenticates = true
+      r.follows = true
       r.headers = {'Accept' => 'application/xml'}
     end
     
@@ -54,6 +63,7 @@ module Caboodle
     end
   
     def self.from_slug(slug)
+      puts "Looking for http://#{Site.posterous_sitename}.posterous.com/#{slug}"
       doc = Caboodle.scrape("http://#{Site.posterous_sitename}.posterous.com/#{slug}")
       puts doc
       opts = {}
@@ -61,10 +71,14 @@ module Caboodle
       opts["title"] = doc.css('title').inner_html.split(" - ").first
       opts["link"] = "http://#{Site.posterous_sitename}.posterous.com/#{slug}"
       perma = doc.css('.permalink').inner_html
-      date = doc.css('article time').first["datetime"] if doc.css('article time').first
-      date ||= doc.css('.date .permalink').first.inner_html if doc.css('.date .permalink').first
-      puts date
-      opts["date"] = Date.parse(date) if date
+      begin
+        date = doc.css('article time').first["datetime"] if doc.css('article time').first
+        date ||= doc.css('.date .permalink').first.inner_html if doc.css('.date .permalink').first
+        opts["date"] = Date.parse(date) if date
+      rescue
+        opts["date"] = Date.parse(Time.now)
+      end
+      puts opts["date"]
       PosterousPost.new(opts)
     end
   
@@ -74,18 +88,26 @@ module Caboodle
     end
   
     def self.all(opts={})
-      r = []
-      p = PosterousAPI.new
-      opts[:site_id] = Site.posterous_site_id 
-      rsp = p.all(opts).perform_sleepily.parse["rsp"]
-      posts = rsp["post"]
-      posts = [posts] if posts.class == Hash
-      posts.each{|a| r << PosterousPost.new(a) } if posts
-      r
+      begin
+        r = []
+        p = PosterousAPI.new
+        opts[:site_id] = Site.posterous_site_id 
+        rsp = p.all(opts).perform.parse["rsp"]
+        posts = rsp["post"]
+        posts = [posts] if posts.class == Hash
+        posts.each{|a| r << PosterousPost.new(a) } if posts
+        r
+      rescue Exception => e
+        raise PosterousProblem.new(e.message)
+      end
     end
   
     def self.get(slug)
-      PosterousPost.new(PosterousAPI.new.all().perform.parse)
+      begin
+        PosterousPost.new(PosterousAPI.new.all().perform.parse)
+      rescue Exception => e
+        raise PosterousProblem.new(e.message)
+      end
     end
   
     def [] k
@@ -109,24 +131,26 @@ module Caboodle
     def semantic_tags
       a = tags.collect{|t| "tag-#{t}"}
       a << "slug-#{slug}"
-      a << "y#{date.year}"
-      a << "m#{date.month}"
-      a << "d#{date.day}"
+      if date
+        a << "y#{date.year}"
+        a << "m#{date.month}"
+        a << "d#{date.day}"
+      end
       a
     end
   
     def url
   		d = date
-  		"/#{d.year}/#{d.month}/#{slug}"
+  		if d
+  		  "/#{d.year}/#{d.month}/#{slug}"
+  		else
+  		  "/#{slug}"
+		  end
   	end
 	
   	def date
-  	  return @date if defined?(@date) 
-  	  if attributes["date"].class == String
-  	    @date = Date.parse(attributes["date"])
-  	  else
-  	    @date = attributes["date"]
-  	  end
+  	  puts attributes.inspect
+  	  @date ||= attributes["date"]
     end
 
   	def full_url
@@ -152,18 +176,28 @@ module Caboodle
       haml :posts
     end
 
-    get "/:year/:month/:slug" do |year, month, slug|
-      STDERR.puts "Get a post"
-    	post = PosterousPost.from_slug(slug)
-    	STDERR.puts "Slug not found: #{slug}"
-    	not_found unless post
-    	@title = post.title
+    get %r{/(\d+)/(\d+)/(.*$)} do |year, month, slug|
+      puts "Blog post: #{params.inspect}"
+      begin
+    	  post = PosterousPost.from_slug(slug)
+    	  @title = post.title
+    	rescue Caboodle::PosterousPostNotFound
+    	  not_found unless post
+    	rescue Caboodle::PosterousProblem
+    	  post = nil
+    	end
     	haml :post, :locals => { :post => post }
     end
     
     menu "Blog", "/posterous" do
-      @posts = PosterousPost.all(:page=>(params[:page] || 1))
-      haml :posts.to_sym
+      begin
+        @posts = PosterousPost.all(:page=>(params[:page] || 1))
+      rescue Caboodle::PosterousProblem
+        @posts = nil
+        puts "Problem accessing posts on Posterous.com"
+      end
+      
+      haml :posts
     end
 
     stylesheets ["http://disqus.com/stylesheets/#{disqus}/disqus.css?v=2.0"] if disqus

@@ -1,10 +1,32 @@
 require 'nokogiri'
 require 'hashie'
 require 'net/http'
+require 'open-uri'
 
 module Caboodle
+  
+  def self.round_time(integer, factor)
+    return integer if(integer % factor == 0)
+    return integer - (integer % factor)
+  end
+  
   def self.scrape url
-    ::Nokogiri::HTML(Weary.get(url).perform_sleepily.body)
+    begin
+      if HAS_MEMCACHE
+        timeout = 60*60*1000
+        sleepy = Memcached.new
+        response = sleepy.get("#{round_time(Time.new.to_i, timeout)}:#{url}") rescue nil
+        response ||= open(url).read
+        sleepy.set("#{round_time(Time.new.to_i, timeout)}:#{url}", response)
+        sleepy.set("0:#{url}", response)
+      else
+        response = open(url).read
+      end
+      ::Nokogiri::HTML(response)
+    rescue Exception => e
+      puts e.inspect
+      ::Nokogiri::HTML("")
+    end
   end
   
   def self.mash req
