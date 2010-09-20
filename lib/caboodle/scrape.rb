@@ -7,7 +7,7 @@ module Caboodle
   
   begin
     require 'memcached'
-    CACHE = Memcached.new
+    CACHE = Memcached.new(ENV["MEMCACHE_SERVERS"])
     puts "Running with memcache"
   rescue
     puts "Running without memcache"
