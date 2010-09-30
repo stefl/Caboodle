@@ -12,7 +12,7 @@ module Caboodle
         doc = ::Nokogiri::XML.parse(open(url).read)
         val = doc.css("owner").first.attributes["nsid"].value
         Site.flickr_user_id = val
-        Config.dump_config
+        Caboodle::Kit.dump_config
       end
       Site.flickr_user_id
     end
