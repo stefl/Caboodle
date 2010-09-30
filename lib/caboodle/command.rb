@@ -28,7 +28,6 @@ module Caboodle
           puts `cd #{site_name} && git commit -m"initial setup"`
         when /kit:add/
           Caboodle::Config.load_kit args.first.capitalize
-          puts "Dump config"
           Caboodle::Kit.dump_config
           puts `git commit -m"kit:add #{args}" -a`
         when /kit:home/
@@ -38,6 +37,7 @@ module Caboodle
           Caboodle::Kit.available_kits.each {|kit| puts kit}
         when /kit:remove/
           Caboodle::Config.unload_kit args.first.capitalize
+          Caboodle::Kit.dump_config
           puts `git commit -m"kit:remove #{args}" -a`
         when /config:list/
           configure
