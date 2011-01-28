@@ -4,12 +4,12 @@ h2. Caboodle is a quick and easy way to create a mashup website
 
 What a Caboodle-based site looks like out of the box:
 
-"Stef.io":http://stef.io 
+"Stef.io":http://stef.io
 
 How you set one up (assuming you are familiar with Ruby)
 
 <pre>sudo gem install caboodle
-  
+
 caboodle create myproject
 (Respond to some questions, such as setting the site's title)
 
@@ -32,11 +32,11 @@ caboodle kit:home tumblr
 caboodle heroku:create myproject
 caboodle heroku:deploy</pre>
 
-h2. "WIKI":http://wiki.github.com/steflewandowski/Caboodle/
+h2. "WIKI":http://wiki.github.com/stefl/Caboodle/
 
-"Getting started":http://wiki.github.com/steflewandowski/Caboodle/getting-started includes instructions on how to use Caboodle without any assumed knowledge of Ruby, Git or Heroku which Caboodle relies upon.
+"Getting started":http://wiki.github.com/stefl/Caboodle/getting-started includes instructions on how to use Caboodle without any assumed knowledge of Ruby, Git or Heroku which Caboodle relies upon.
 
-"Creating a Caboodle":http://wiki.github.com/steflewandowski/Caboodle/creating-a-caboodle walks you through the process of setting up a Caboodle website.
+"Creating a Caboodle":http://wiki.github.com/stefl/Caboodle/creating-a-caboodle walks you through the process of setting up a Caboodle website.
 
 h2. Questions
 
