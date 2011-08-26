@@ -1,13 +1,4 @@
-gem "sinatra-compass"
-require "sinatra/compass"
-
-gem "compass-susy-plugin"
 require "susy"
-
-require "compass"
-require "sinatra/base"
-#require "sinatra/sugar"
-require "sinatra/advanced_routes"
 
 module Caboodle
   class Susy < Caboodle::Kit

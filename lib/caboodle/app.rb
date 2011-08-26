@@ -8,7 +8,20 @@ module Caboodle
     set :run, false
     set :root_config, File.expand_path(File.join(Caboodle::App.root,"config","site.yml"))
     
-    helpers Sinatra::CaboodleHelpers
+    helpers do
+      def method_missing arg
+        Caboodle::Layout[arg]
+      end
+
+      def title
+        if request.path_info == "/"
+          "#{Caboodle::Site.title} | #{Caboodle::Site.description}"
+        else
+          t = Caboodle::Site.title
+          t = "#{@title} | #{t}" if @title
+        end
+      end
+    end
     
     configure do
       Caboodle::Kit.configure_site root_config if File.exists?(root_config)
