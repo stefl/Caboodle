@@ -1,3 +1,22 @@
 $:<<File.dirname(__FILE__)
 $:<<File.join(File.dirname(__FILE__),"caboodle")
-%{sinatra/base caboodle/app yaml hashie haml maruku find sinatra/base sinatra/advanced_routes compass susy pp sleepy caboodle/config caboodle/markdown caboodle/helpers caboodle/config caboodle/kit  caboodle/scrape sinatra/compass}.split.each{|a| require a}
+require "sinatra/base"
+require "yaml"
+require "hashie"
+require "haml"
+require "maruku"
+require "find"
+require "sinatra/base"
+require "sinatra/advanced_routes"
+require "compass"
+require "susy"
+require "pp"
+require "sleepy"
+require "caboodle/config"
+require "caboodle/markdown"
+require "caboodle/helpers"
+require "caboodle/config"
+require "caboodle/kit"
+require "caboodle/app"
+require "caboodle/scrape"
+require "sinatra/compass"
