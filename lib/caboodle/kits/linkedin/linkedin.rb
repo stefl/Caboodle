@@ -7,6 +7,9 @@ module Caboodle
     def initialize
       @full = Caboodle.scrape(Site.linkedin_profile_url)
       @full.css('.showhide-link').each{|a| @full.delete(a)}
+      @full.css('#profile-contact').each{|a| @full.delete(a)}
+      @full.css('.view-full-profile').each{|a| @full.delete(a)}
+      @full.css('#extra').each{|a| @full.delete(a)}
       @full = @full.css("#main").to_html.gsub("#{Site.linkedin_full_name}’s ","")
     end
     def method_missing(method_name)
