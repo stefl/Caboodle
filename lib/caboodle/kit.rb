@@ -41,6 +41,7 @@ module Caboodle
       def inherited subclass
         set :kit_root, File.expand_path(File.dirname(caller[0].split(/:in/).last))
         c = caller[0].split(":")
+        puts c.inspect
         f = File.dirname(File.expand_path("#{c[0]}"))
         views = File.join(f, "views")
         pub = File.join(f, "public")
