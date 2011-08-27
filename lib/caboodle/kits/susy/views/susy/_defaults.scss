@@ -6,7 +6,11 @@
 // Imports --------------------------------------------------------------*/
 
 @import "base";
-@import "susy/reset";
+@import "compass/reset";
+@import "compass/css3";
+@import "compass/typography/lists/inline-block-list";
+@import "compass/typography/vertical_rhythm";
+@include establish_baseline();
 
 /* Body --------------------------------------------------------------*/
 

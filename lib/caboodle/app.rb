@@ -9,8 +9,9 @@ module Caboodle
     set :root_config, File.expand_path(File.join(Caboodle::App.root,"config","site.yml"))
     
     helpers do
-      def method_missing arg
-        Caboodle::Layout[arg]
+      def method_missing *args
+        puts "METHOD MISSING"
+        Caboodle::Layout[args[0]] || super(*args)
       end
 
       def title

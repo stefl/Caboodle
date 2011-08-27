@@ -22,7 +22,7 @@ module Caboodle
       self.credentials(u, p)
       sitename = opts[:sitename] || Site.posterous_sitename
       unless defined?(Site.posterous_site_id)
-        response = Hashie::Mash.new(getsites.perform_sleepily.parse)
+        response = Hashie::Mash.new(getsites.perform.parse)
         sites = response.rsp.site        
         sites.each do |site|
           if site.url.include?("http://#{Site.posterous_sitename}.posterous.com")
@@ -65,7 +65,7 @@ module Caboodle
     def self.from_slug(slug)
       puts "Looking for http://#{Site.posterous_sitename}.posterous.com/#{slug}"
       doc = Caboodle.scrape("http://#{Site.posterous_sitename}.posterous.com/#{slug}")
-      #puts doc
+      puts doc.inspect
       opts = {}
       opts["body"] = doc.css('div.bodytext').inner_html
       opts["title"] = doc.css('title').inner_html.split(" - ").first
@@ -82,7 +82,7 @@ module Caboodle
       PosterousPost.new(opts)
     end
   
-    def self.page(num)
+    def self.page(num=1)
       raise "must be page 1 or more" if num.to_i < 1
       PosterousPost.all(:page=>num.to_i)
     end
@@ -92,12 +92,14 @@ module Caboodle
         r = []
         p = PosterousAPI.new
         opts[:site_id] = Site.posterous_site_id 
-        rsp = p.all(opts).perform_sleepily.parse["rsp"]
+        rsp = p.all(opts).perform.parse["rsp"]
+        puts rsp
         posts = rsp["post"]
         posts = [posts] if posts.class == Hash
         posts.each{|a| r << PosterousPost.new(a) } if posts
         r
       rescue Exception => e
+        puts "GOT AN ERROR: #{e.message}"
         raise PosterousProblem.new(e.message)
       end
     end

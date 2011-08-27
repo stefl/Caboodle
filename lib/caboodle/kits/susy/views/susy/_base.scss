@@ -17,7 +17,7 @@ $gutter-width: 1em;
 $side-gutter-width: $gutter-width;
 
 // Don't move this @import above the GRID and FONT-SIZE variables.
-@import "susy/susy";
+@import "susy";
 
 // Colors --------------------------------------------------------------
 
@@ -52,4 +52,3 @@ $article_color: #999;
 // Or anywhere you import either base.sass or defaults.sass
 
 // By default use the user's SCSS base file if it exists
-@import "scss/_base";

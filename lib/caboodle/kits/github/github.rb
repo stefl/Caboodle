@@ -29,7 +29,7 @@ module Caboodle
     end
     
     def self.repositories
-      a = Hashie::Mash.new(GithubAPI.new.repositories.perform_sleepily.parse).repositories
+      a = Hashie::Mash.new(GithubAPI.new.repositories.perform.parse).repositories
       puts a.inspect
       a
     end
