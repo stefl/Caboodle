@@ -1,5 +1,6 @@
 $:<<File.dirname(__FILE__)
 $:<<File.join(File.dirname(__FILE__),"caboodle")
+require "rack"
 require "rack/mime"
 require "backports"
 require "sinatra/base"
