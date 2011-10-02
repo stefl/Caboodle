@@ -13,20 +13,16 @@ module Caboodle
     puts "Running without memcache"
   end
   
-  def self.round_time(integer, factor)
-    return integer if(integer % factor == 0)
-    return integer - (integer % factor)
-  end
-  
   def self.scrape url
     begin
       if defined?(CACHE)
         begin
           puts "Scraping with cache optimisation"
           timeout = 60*60*1000
-          response = CACHE.get("#{round_time(Time.new.to_i, timeout)}:#{url}") rescue nil
+          t = Time.new.to_i
+          response = CACHE.get("#{t - (t%timeout)}:#{url}") rescue nil
           response ||= open(url).read
-          CACHE.set("#{round_time(Time.new.to_i, timeout)}:#{url}", response)
+          CACHE.set("#{t - (t%timeout)}:#{url}", response)
           CACHE.set("0:#{url}", response)
         rescue
           # Probably a dead memcached server
