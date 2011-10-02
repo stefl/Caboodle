@@ -1,6 +1,6 @@
 module Caboodle
   
-  class Kit < Sinatra::Base
+  class Kit < Padrino::Application
     
     set :app_file, __FILE__
     set :logging, true
@@ -38,19 +38,13 @@ module Caboodle
       
       attr_accessor :credit_link
       
-      
-      
       def inherited subclass
-        puts "INHERITED"
-        puts caller.inspect
         set :kit_root, File.expand_path(File.dirname(caller[0].split(/:in/).last))
         
         c = caller[0].split(":")
-        puts c.inspect
         f = File.dirname(File.expand_path("#{c[0]}"))
         set :app_file, f
         views = File.join(f, "views")
-        puts views.inspect
         pub = File.join(f, "public")
         subclass.set :views, views if File.exists?(views)
         subclass.set :public, pub if File.exists?(pub)
