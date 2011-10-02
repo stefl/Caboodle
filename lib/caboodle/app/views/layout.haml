@@ -2,6 +2,8 @@
 %html{:dir => "ltr", :lang => "en-US", :xmlns => "http://www.w3.org/1999/xhtml"}
   %head{:profile => "http://gmpg.org/xfn/11"}
     %link{:href => @url_base, :rel => "index", :title => @title}/
+    - if Caboodle::Site.canonical
+      %link{:rel => "canonical", :href => "#{Caboodle::Site.canonical}#{request.path}"}
     %meta{:content => "text/html; charset=utf-8", "http-equiv" => "content-type"}/
     %meta{:content => "index,follow", :name => "robots"}/
     %meta{:content => "Caboodle", :name => "generator"}/
