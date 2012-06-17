@@ -1,6 +1,8 @@
 !http://img.skitch.com/20100905-fsdm4du28y6cpbbf8p3b187j18.png!
 
-h2. Caboodle is a quick and easy way to create a mashup website
+h2. Caboodle was a quick and easy way to create a mashup website, and is kept here for reference.
+
+Sadly, so much has moved underneath Caboodle that it's in need of a refactor. I've moved over to Padrino and much of Caboodle now lives on but as helpers for that framework. At some point I will pull them out into a future version.
 
 What a Caboodle-based site looks like out of the box:
 
